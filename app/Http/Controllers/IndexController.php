@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Type;
 
 class IndexController extends Controller
 {
@@ -49,8 +50,9 @@ class IndexController extends Controller
             $rooms = Room::paginate(20);
             $roomsCount = Room::count();
         }
+        $type = Type::get();
 
-        return view('frontend.rooms', compact('rooms', 'roomsCount', 'request'));
+        return view('frontend.rooms', compact('rooms', 'roomsCount', 'request', 'type'));
     }
 
     public function facility()
@@ -74,51 +76,60 @@ class IndexController extends Controller
 
     private function getUnocuppiedroom($request, $occupiedRoomId)
     {
-        if ($request->count != null) {
-            $rooms = Room::with('type', 'status')->where('capacity', '>=', $request->count)->whereNotIn('id', $occupiedRoomId);
-        } else {
-            $rooms = Room::with('type', 'status')->whereNotIn('id', $occupiedRoomId);
-        }
-        $rooms = $rooms
-            ->orderBy('capacity')
-            ->paginate(10);
+        $rooms = Room::with('type', 'status')
+            ->whereNotIn('id', $occupiedRoomId);
 
-        return $rooms;
+        if ($request->count != null) {
+            $rooms->where('capacity', '>=', $request->count);
+        }
+
+        if ($request->type_id) {
+            $rooms->where('type_id', $request->type_id);
+        }
+
+        return $rooms->orderBy('capacity')->paginate(10);
     }
+
     private function getUnocuppiedroom2($request)
     {
-        $rooms = Room::with('type', 'status')->where('capacity', '>=', $request->count);
-        $rooms = $rooms
-            ->orderBy('capacity')
-            ->paginate(10);
-        return $rooms;
+        $rooms = Room::with('type', 'status')
+            ->where('capacity', '>=', $request->count);
+
+        if ($request->type_id) {
+            $rooms->where('type_id', $request->type_id);
+        }
+
+        return $rooms->orderBy('capacity')->paginate(10);
     }
+
     private function countUnocuppiedroom($request, $occupiedRoomId)
     {
+        $roomsCount = Room::with('type', 'status')
+            ->whereNotIn('id', $occupiedRoomId);
+
         if ($request->count != null) {
-            $roomsCount = Room::with('type', 'status')
-                ->where('capacity', '>=', $request->count)
-                ->whereNotIn('id', $occupiedRoomId)
-                ->orderBy('price')
-                ->orderBy('capacity')
-                ->count();
-        } else {
-            $roomsCount =  Room::with('type', 'status')
-                ->whereNotIn('id', $occupiedRoomId)
-                ->orderBy('price')
-                ->orderBy('capacity')
-                ->count();
+            $roomsCount->where('capacity', '>=', $request->count);
         }
-        return $roomsCount;
+
+        if ($request->type_id) {
+            $roomsCount->where('type_id', $request->type_id);
+        }
+
+        return $roomsCount->count();
     }
+
     private function countUnocuppiedroom2($request)
     {
-        return Room::with('type', 'status')
-            ->where('capacity', '>=', $request->count)
-            ->orderBy('price')
-            ->orderBy('capacity')
-            ->count();
+        $roomsCount = Room::with('type', 'status')
+            ->where('capacity', '>=', $request->count);
+
+        if ($request->type_id) {
+            $roomsCount->where('type_id', $request->type_id);
+        }
+
+        return $roomsCount->count();
     }
+
 
 
     private function getOccupiedRoomID($stayfrom, $stayto)

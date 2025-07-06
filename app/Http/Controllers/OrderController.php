@@ -29,9 +29,14 @@ class OrderController extends Controller
         $stayuntil = Carbon::parse($request->to);
         $room = Room::where('id', $request->room)->first();
 
-        $cektransaksi = Transaction::where('room_id', $request->room)->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
-            ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
-            ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]])->get();
+        $cektransaksi = Transaction::where('room_id', $request->room)
+            ->where(function ($query) use ($stayfrom, $stayuntil) {
+                $query->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
+                    ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
+                    ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]]);
+            })
+            ->get();
+
         if ($cektransaksi->count() > 0) {
             Alert::error('Kamar Tidak Tersedia');
             return back();
@@ -60,9 +65,13 @@ class OrderController extends Controller
         //cek transaksi apakah kamar sudah ada booking
         $stayfrom = Carbon::parse($request->check_in);
         $stayuntil = Carbon::parse($request->check_out);
-        $cektransaksi = Transaction::where('room_id', $request->room)->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
-            ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
-            ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]])->get();
+        $cektransaksi = Transaction::where('room_id', $request->room)
+            ->where(function ($query) use ($stayfrom, $stayuntil) {
+                $query->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
+                    ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
+                    ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]]);
+            })
+            ->get();
         if ($cektransaksi->count() > 0) {
             Alert::error('Kamar Tidak Tersedia');
             return back();
