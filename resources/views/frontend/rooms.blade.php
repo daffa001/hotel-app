@@ -17,7 +17,7 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow">
                 <div class="container-fluid flex-lg-column align-items-stretch">
-                    <h4 class="mt-2">FILTERS</h4>
+                    <h4 class="mt-2">Pencarian</h4>
                     <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse"
                         data-bs-target="#filterDropdown" aria-controls="navbarNav" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -27,8 +27,9 @@
                         <form action="/rooms" method="GET">
                             @csrf
                             <div class="border bg-light p-3 rounded mb-3">
-                                <h5 class="mb-3" style="font-size: 18px;">CHECK AVAILABILITY</h5>
+                                <h5 class="mb-3" style="font-size: 18px;">Check Ketersediaan Kamar</h5>
                                 <select class="form-select" name="type_id" id="type_id">
+                                    
                                     <option value="">-- All Types --</option> {{-- <-- Tambahan ini --}}
                                     @foreach ($type as $t)
                                     <option value="{{ $t->id }}"
@@ -59,10 +60,10 @@
         </div>
     </div> --}}
                             <div class="border bg-light p-3 rounded mb-3">
-                                <h5 class="mb-3" style="font-size: 18px;">Person</h5>
+                                <h5 class="mb-3" style="font-size: 18px;">Tamu</h5>
                                 <div class="d-flex">
                                     <div class="me-2">
-                                        <label class="form-label">How many person?</label>
+                                        <label class="form-label">Berapa banyak tamu?</label>
                                         <input type="number" name="count" class="form-control shadow-none"
                                             value="1">
                                     </div>

@@ -9,6 +9,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +77,14 @@ Route::get('/dashboard/user/{user:username}/edit', [UserController::class, 'edit
 Route::post('/dashboard/user/post', [UserController::class, 'post']);
 Route::post('/dashboard/user/update', [UserController::class, 'update']);
 Route::any('/dashboard/user/{id}/delete', [UserController::class, 'delete']);
+
+
+// Data check in check out user
+Route::get('/dashboard/checkout/checkoutlist', [CheckoutController::class, 'index']);
+Route::get('/dashboard/checkout/checkoutlist/{id}', [CheckoutController::class, 'checkin']);
+
+
+
 // (Hotel) Ordering Dashboard (Order offline via admin) payment etc
 Route::get('/dashboard/order', [TransactionController::class, 'index'])->name('transaction.index');
 Route::get('/dashboard/order/history', [TransactionController::class, 'history']);

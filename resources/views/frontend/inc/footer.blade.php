@@ -2,10 +2,7 @@
  	<div class="row">
  		<div class="col-lg-4 p-4 order-lg-1 order-md-2 order-2">
  			<h3 class="h-font fw-bold fs-3 mb-2 ">Hotel Kuta</h3>
- 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
- 			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
- 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
- 			consequat.</p>
+ 			<p>Hotel Kuta, yang didirikan pada tahun 2025, awalnya merupakan sebuah hotel kecil dengan jumlah kamar terbatas. Seiring perkembangannya, Hotel Kuta kini telah memiliki lebih dari 20 kamar. Fasilitas yang disediakan oleh Hotel Kuta ini meliputi kolam renang pribadi, ruangan khusus merokok, akses WiFi gratis, serta layanan sarapan dan makan siang.</p>
  		</div>
  		<div class="col-lg-4 p-4 order-lg-3 order-md-1 order-1">
  			<h5 class="mb-3">Link</h5>

@@ -16,10 +16,7 @@
     @include('frontend.sectionindex.kamar')
  </section>
 
- <!--  Facilities-->
- <section class="facility-index py-5 bg-custom" id="facility-index">
-   @include('frontend.sectionindex.facility')
- </section>
+
 
  <!-- Contact -->
  <section class="contact-index py-5" id="contact-index">

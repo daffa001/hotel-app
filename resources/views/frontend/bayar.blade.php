@@ -19,7 +19,7 @@
                             <div class="col-md-12">
 
                                 <div class="row mb-3">
-                                    <label for="room_number" class="col-sm-2 col-form-label">Room</label>
+                                    <label for="room_number" class="col-sm-2 col-form-label">No Kamar</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control"z id="room_no" name="room_no"
                                             placeholder="col-form-label" value="{{ $t->room->no }} " disabled>
@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="room_type" class="col-sm-2 col-form-label">Type</label>
+                                    <label for="room_type" class="col-sm-2 col-form-label">Jenis Kamar</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="room_type" name="room_type"
                                             placeholder="col-form-label" value="{{ $t->room->type->name }} " disabled>
@@ -35,7 +35,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="room_capacity" class="col-sm-2 col-form-label">Capacity</label>
+                                    <label for="room_capacity" class="col-sm-2 col-form-label">Kapasitas</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="room_capacity" name="room_capacity"
                                             placeholder="col-form-label" value="{{ $t->room->capacity }} " disabled>
@@ -43,7 +43,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="room_price" class="col-sm-2 col-form-label">Price / Day</label>
+                                    <label for="room_price" class="col-sm-2 col-form-label">Harga / malam</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="room_price" name="room_price"
                                             placeholder="col-form-label" value="IDR {{ number_format($t->room->price) }}"
@@ -80,19 +80,19 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="how_long" class="col-sm-2 col-form-label">Total Day</label>
+                                    <label for="how_long" class="col-sm-2 col-form-label">Total Hari</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="how_long" name="how_long"
                                             placeholder="col-form-label"
-                                            value="{{ $t->check_in->diffindays($t->check_out) }} Day" disabled>
+                                            value="{{ $t->check_in->diffindays($t->check_out) }} Hari" disabled>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="total_price" class="col-sm-2 col-form-label">Total Price</label>
+                                    <label for="total_price" class="col-sm-2 col-form-label">Total Harga</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="total_price" name="total_price"
-                                            placeholder="col-form-label" value="IDR {{ number_format($price) }} " disabled>
+                                            placeholder="col-form-label" value="RP.  {{ number_format($price) }} " disabled>
                                     </div>
                                 </div>
 

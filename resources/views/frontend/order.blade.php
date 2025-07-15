@@ -19,21 +19,21 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row mb-3">
-                                            <label for="room_number" class="col-sm-2 col-form-label">Room</label>
+                                            <label for="room_number" class="col-sm-2 col-form-label">No Kamar</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="room_no" name="room_no"
                                                     placeholder="col-form-label" value="{{ $room->no }} " disabled>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="room_type" class="col-sm-2 col-form-label">Type</label>
+                                            <label for="room_type" class="col-sm-2 col-form-label">Jenis Kamar</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="room_type" name="room_type"
                                                     placeholder="col-form-label" value="{{ $room->type->name }} " disabled>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="room_capacity" class="col-sm-2 col-form-label">Capacity</label>
+                                            <label for="room_capacity" class="col-sm-2 col-form-label">Kapasitas</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="room_capacity"
                                                     name="room_capacity" placeholder="col-form-label"
@@ -41,11 +41,11 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="room_price" class="col-sm-2 col-form-label">Price / Day</label>
+                                            <label for="room_price" class="col-sm-2 col-form-label">Harga / Malam</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="room_price" name="room_price"
                                                     placeholder="col-form-label"
-                                                    value="IDR {{ number_format($room->price) }}" disabled>
+                                                    value="Rp. {{ number_format($room->price) }}" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label for="how_long" class="col-sm-2 col-form-label">Total Day</label>
+                                                <label for="how_long" class="col-sm-2 col-form-label">Total Hari</label>
                                                 <div class="col-sm-10">
                                                     <input type="text" class="form-control" id="how_long"
                                                         name="how_long" placeholder="col-form-label"
@@ -92,7 +92,7 @@
 
                                             <div class="row mb-3">
                                                 <label for="total_price" class="col-sm-2 col-form-label">Total
-                                                    Price</label>
+                                                    Harga</label>
                                                 <div class="col-sm-10">
                                                     <input type="text" class="form-control" id="total_price"
                                                         name="total_price" placeholder="col-form-label"
@@ -119,7 +119,7 @@
                                             <hr>
 
                                             <div class="row mb-4" style="margin-bottom:50px">
-                                                <label for="NIK" class="col-sm-2 col-form-label">NIK</label>
+                                                <label for="NIK" class="col-sm-2 col-form-label">No Ktp</label>
                                                 <div class="col-sm-10">
                                                     <input type="text" class="form-control" id="NIK"
                                                         placeholder="col-form-label"
@@ -127,8 +127,7 @@
                                                 </div>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary float-end">Pay
-                                                DownPayment</button>
+                                            <button type="submit" class="btn btn-primary float-end">Berikutnya</button>
                                         </form>
                                     </div>
                                 </div>
@@ -165,7 +164,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    {{ $customer->name }}
+                                   Nama : {{ $customer->name }}
                                 </td>
                             </tr>
                             <tr>
@@ -174,7 +173,7 @@
                                         <i class="fas fa-user-md"></i>
                                     </span>
                                 </td>
-                                <td>{{ $customer->job }}</td>
+                                <td>Perkerjaan : {{ $customer->job }}</td>
                             </tr>
                             <tr>
                                 <td style="text-align: center; ">
@@ -183,7 +182,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    {{ Carbon\Carbon::parse($customer->birthdate)->isoformat('D MMM YYYY') }}
+                                   Tanggal Lahir : {{ Carbon\Carbon::parse($customer->birthdate)->isoformat('D MMM YYYY') }}
                                 </td>
                             </tr>
                             <tr>
@@ -192,7 +191,7 @@
                                     <span>
                                         @if ($customer->User)
                                             @if ($customer->User->telp)
-                                                0{{ $customer->User->telp }}
+                                                No telp : {{ $customer->User->telp }}
                                             @else
                                                 -
                                             @endif
@@ -209,7 +208,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    {{ $customer->address }}
+                                  alamat :  {{ $customer->address }}
                                 </td>
                             </tr>
                         </table>

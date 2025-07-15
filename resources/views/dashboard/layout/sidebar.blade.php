@@ -62,6 +62,20 @@
          </div>
      </li>
 
+
+  <li class="nav-item {{ Request::is('dashboard/checkout*') ? 'active' : '' }}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsecheckout"
+        aria-expanded="true" aria-controls="collapsecheckout">
+        <i class="fas fa-fw fa-sign-out-alt"></i>
+        <span>Checkout</span>
+    </a>
+    <div id="collapsecheckout" class="collapse" aria-labelledby="headingcheckout" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Data</h6>
+            <a class="collapse-item" href="/dashboard/checkout/checkoutlist">Check in Check out</a>
+        </div>
+    </div>
+</li>
      <!-- Divider -->
      <hr class="sidebar-divider">
 

@@ -67,24 +67,31 @@
                                 $parturl = explode('pay/', $url);
                                 $idpay = trim($parturl[1]);
                                 $pay = App\Models\Payment::where('id', $idpay)->first();
-                                
-                                $message = json_decode($n->data)->message;
-                                $partmessage = explode('.', $message);
-                                $datatrim = trim($partmessage[0]);
-                                $checkin = Carbon\Carbon::parse($pay->Transaction->check_in)->format('d M Y');
-                                $checkout = Carbon\Carbon::parse($pay->Transaction->check_out)->format('d M Y');
-                                $total = $pay->price;
-                                $invoice = $pay->invoice;
                             @endphp
-                            @if ($pay->status == 'Pending')
-                                <span class="font-weight-bold">{{ $datatrim }}</span>
-                            @else
-                                <span class="font-weight-bold">{{ $message }}</span>
+                            @if ($pay)
+                                @php
+                                    $message = json_decode($n->data)->message;
+                                    $partmessage = explode('.', $message);
+                                    $datatrim = trim($partmessage[0]);
+
+                                    // Blok ini sekarang aman karena kita sudah yakin $pay tidak null
+                                    $checkin = Carbon\Carbon::parse($pay->Transaction->check_in)->format('d M Y');
+                                    $checkout = Carbon\Carbon::parse($pay->Transaction->check_out)->format('d M Y');
+                                    $total = $pay->price;
+                                    $invoice = $pay->invoice;
+                                @endphp
+
+                                @if ($pay->status == 'Pending')
+                                    <span class="font-weight-bold">{{ $datatrim }}</span>
+                                @else
+                                    <span class="font-weight-bold">{{ $message }}</span>
+                                @endif
+
+                                <div class="small text-gray-500">|Invoice {{ $invoice }} | Total IDR
+                                    {{ number_format($total) }} | {{ $checkin }} -
+                                    {{ $checkout }}|
+                                </div>
                             @endif
-                            <div class="small text-gray-500">|Invoice {{ $invoice }} | Total IDR
-                                {{ number_format($total) }} | {{ $checkin }} -
-                                {{ $checkout }}|</div>
-                        </div>
                     </button>
                 </form>
             @endforeach

@@ -41,7 +41,7 @@
 
         </div>
         <div class="d-flex justify-content-center">
-            <h5 class="mt-4">Lunch</h5>
+            <h5 class="mt-4">Makan Siang</h5>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
 
         </div>
         <div class="d-flex justify-content-center">
-            <h5 class="mt-4">Hot Water</h5>
+            <h5 class="mt-4">Pemandian Air Panas</h5>
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
 
         </div>
         <div class="d-flex justify-content-center">
-            <h5 class="mt-4">Breakfast</h5>
+            <h5 class="mt-4">Sarapan</h5>
         </div>
       </div>
     </div>
@@ -74,7 +74,7 @@
 
         </div>
         <div class="d-flex justify-content-center">
-            <h5 class="mt-4">8 Ball Pool</h5>
+            <h5 class="mt-4">Billiar</h5>
         </div>
       </div>
     </div>

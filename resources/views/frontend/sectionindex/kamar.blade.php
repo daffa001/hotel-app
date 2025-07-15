@@ -18,7 +18,7 @@
                     <h5 class="card-title">{{ $r->type->name }} #{{ $r->no }}</h5>
                     <h6 class="mb-3 text-success">IDR {{ number_format($r->price) }} </h6>
                     <div class="guests mb-2">
-                        <h6 class="mb-1">Guests</h6>
+                        <h6 class="mb-1">Tamu</h6>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
                             {{ $r->capacity }}
                         </span>
@@ -27,10 +27,10 @@
                         <h6 class="mb-1">Features</h6>
                         @if ($r->capacity <= 5)
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            2 Rooms
+                            2 Kamar
                             </span>
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
-                                1 Bathroom
+                                1 Kamar Mandi
                             </span>
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
                                 1 Balcony
@@ -46,10 +46,10 @@
                         <span class="badge rounded-pill bg-light text-dark text-wrap">AC</span>
                         @elseif ($r->capacity <= 10)
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            3 Rooms
+                            3 Kamar
                             </span>
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
-                                2 Bathroom
+                                2 Kamar Mandi
                             </span>
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
                                 2 Balcony
@@ -64,20 +64,20 @@
                             Wifi
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            Television
+                            Televisi
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
                             AC
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            Room Heater
+                            Penghangat ruangan
                         </span>
                         @else
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            4 Rooms
+                            4 Kamar
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            2 Bathroom
+                            2 Kamar Mandi
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
                             2 Balcony
@@ -92,7 +92,7 @@
                             Wifi
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            Television
+                            Televisi
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
                             AC
@@ -101,13 +101,13 @@
                             Room Heater
                         </span>
                         <span class="badge rounded-pill bg-light text-dark text-wrap">
-                            Smooke Room
+                            Ruangan Merokok
                         </span>
                         @endif
                     </div>
                     <div class="d-flex justify-content-evenly mb-2">
-                        <a href="/rooms/{{ $r->no }}" class="btn btn-sm border border-black btn- shadow-none">Book Now</a>
-                        <a href="/rooms/{{ $r->no }}" class="btn btn-sm btn-dark shadow-none">More details</a>
+                        <a href="/rooms/{{ $r->no }}" class="btn btn-sm border border-black btn- shadow-none">Booking</a>
+                        <a href="/rooms/{{ $r->no }}" class="btn btn-sm btn-dark shadow-none">Detail Lengkap</a>
                     </div>
 
                 </div>
@@ -115,7 +115,7 @@
         </div>
         @endforeach
         <div class="col-lg-12 text-center mt-5">
-            <a href="/rooms" class="btn btn-sm btn-dark rounded-0 fw-bold shadow-none">More Rooms</a>
+            <a href="/rooms" class="btn btn-sm btn-dark rounded-0 fw-bold shadow-none">Lebih Banyak</a>
         </div>
     </div>
 </div>
