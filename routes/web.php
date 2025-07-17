@@ -10,6 +10,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::get('/myaccount/{id}/delete-foto', [UserController::class, 'delfoto']);
 Route::post('/myaccount/{id}/update', [UserController::class, 'updatefront']);
 Route::get('/myaccount', [UserController::class, 'profile']);
 Route::get('/history', [UserController::class, 'history']);
+Route::get('/cart', [CartController::class, 'index']);
+Route::post('/cart', [CartController::class, 'index']);
+
 // (Hotel) Index route
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/rooms', [IndexController::class, 'room']);

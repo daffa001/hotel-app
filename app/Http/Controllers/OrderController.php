@@ -55,6 +55,7 @@ class OrderController extends Controller
         $paymentmet = PaymentMethod::whereNotIn('id', $paymentmethodnotid)->get();
 
         return view('frontend.order', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
+        // return view('user.cart', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
     }
 
     public function order(Request $request)

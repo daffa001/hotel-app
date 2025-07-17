@@ -19,9 +19,10 @@
                                 <th width="4%">#</th>
                                 {{-- <th class="text-center">ID</th> --}}
                                 <th class="text-center">Customer</th>
-                                <th class="text-center">Kamar</th>
+                                <th class="text-center">No Kamar</th>
+                                <th class="text-center">Jenis Kamar</th>
                                 <th class="text-center">Price</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Payment Date</th>
                                 <th class="text-center">Bukti</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -33,6 +34,7 @@
                                     {{-- <td class="text-center">{{ $p->id }}</td> --}}
                                     <td class="text-center">{{ $p->Customer->name }}</td>
                                     <td class="text-center">{{ $p->Transaction->Room->no }}</td>
+                                    <td class="text-center">{{ $p->Transaction->Room->Type->name }}</td>
                                     <td class="text-center">IDR {{ number_format($p->price) }}</td>
                                     <td class="text-center">{{ $p->created_at->isoformat('D MMMM Y') }}</td>
                                     <td class="text-center">
@@ -72,9 +74,10 @@
                                 <th width="4%">#</th>
                                 {{-- <th class="text-center">ID</th> --}}
                                 <th class="text-center">Customer</th>
-                                <th class="text-center">Kamar</th>
+                                <th class="text-center">No Kamar</th>
+                                <th class="text-center">Jenis Kamar</th>
                                 <th class="text-center">Price</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Payment Date</th>
                                 <th class="text-center">Bukti</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -97,9 +100,10 @@
                                 <th width="4%">#</th>
                                 {{-- <th class="text-center">ID</th> --}}
                                 <th class="text-center">Customer</th>
-                                <th class="text-center">Kamar</th>
+                                <th class="text-center">No Kamar</th>
+                                <th class="text-center">Jenis Kamar</th>
                                 <th class="text-center">Price</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Payment Date</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -111,6 +115,7 @@
                                     {{-- <td class="text-center">{{ $p->id }}</td> --}}
                                     <td class="text-center">{{ $p->Customer->name }}</td>
                                     <td class="text-center">{{ $p->Transaction->Room->no }}</td>
+                                    <td class="text-center">{{ $p->Transaction->Room->Type->name }}</td>
                                     <td class="text-center">IDR {{ number_format($p->price) }}</td>
                                     <td class="text-center">{{ $p->created_at->isoformat('D MMMM Y') }}</td>
                                     <td class="text-center">{{ $p->status }}</td>
@@ -124,9 +129,10 @@
                                 <th width="4%">#</th>
                                 {{-- <th class="text-center">ID</th> --}}
                                 <th class="text-center">Customer</th>
-                                <th class="text-center">Kamar</th>
+                                <th class="text-center">No Kamar</th>
+                                <th class="text-center">Jenis Kamar</th>
                                 <th class="text-center">Price</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Payment Date</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>

@@ -49,7 +49,7 @@
                                         <td>Nama {{ $pay->Transaction->Customer->name }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Reservasi Kamar {{ $pay->Transaction->Room->no }}</td>
+                                        <td>Reservasi Kamar {{ $pay->Transaction->Room->Type->name }} {{ $pay->Transaction->Room->no}} </td>
                                     </tr>
                                     <tr>
                                         <th>Price/day IDR {{ number_format($pay->Transaction->Room->price) }}</th>
