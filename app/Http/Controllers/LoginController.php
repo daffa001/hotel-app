@@ -36,7 +36,15 @@ class LoginController extends Controller
                 Cookie::queue('password', $request->password, $minutes);
             }
             Alert::success('Success', 'Login berhasil');
-            return redirect()->intended('/')->with('success');
+            
+            // Check if user is admin and redirect accordingly
+            if (Auth::user()->is_admin == 1) {
+                // Redirect admin to dashboard
+                return redirect()->intended('/dashboard')->with('success');
+            } else {
+                // Redirect regular user to homepage
+                return redirect()->intended('/')->with('success');
+            }
         }
         Alert::error('Error', 'Gagal');
         return redirect('/login');
