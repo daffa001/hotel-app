@@ -82,21 +82,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="/order">
+                <div class="alert alert-info" role="alert">
+                    <small><i class="fas fa-info-circle"></i> Tanggal yang berwarna merah sudah dibooking dan tidak bisa dipilih</small>
+                </div>
+                <form method="post" action="/order" id="bookingForm">
                     @csrf
                     <input type="hidden" name="customer" value="{{ $customer }}">
                     <input type="hidden" name="room" value="{{ $room->id }}">
                     <div class="mb-3">
                         <label for="check_in" class="col-form-label">Check in</label>
-                        <input type="date" class="form-control" required id="check_in" name="from">
+                        <input type="date" class="form-control" required id="check_in" name="from" min="{{ date('Y-m-d') }}">
+                        <div class="invalid-feedback" id="check_in_error"></div>
                     </div>
                     <div class="mb-3">
                         <label for="check_out" class="col-form-label">Check out</label>
-                        <input type="date" class="form-control" required id="check_out" name="to">
+                        <input type="date" class="form-control" required id="check_out" name="to" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                        <div class="invalid-feedback" id="check_out_error"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"> Cek Tanggal</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn"> Cek Tanggal</button>
 
                     </div>
                 </form>
@@ -238,4 +243,203 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roomId = {{ $room->id }};
+    let bookedDates = [];
+    
+    // Fetch booked dates for this room
+    fetchBookedDates(roomId);
+    
+    function fetchBookedDates(roomId) {
+        fetch(`/api/booked-dates/${roomId}`)
+            .then(response => response.json())
+            .then(data => {
+                bookedDates = data.bookedDates || [];
+                setupDateRestrictions();
+            })
+            .catch(error => {
+                console.error('Error fetching booked dates:', error);
+                setupDateRestrictions();
+            });
+    }
+    
+    function setupDateRestrictions() {
+        const checkInInput = document.getElementById('check_in');
+        const checkOutInput = document.getElementById('check_out');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Set minimum dates
+        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        
+        checkInInput.min = today;
+        checkOutInput.min = tomorrowStr;
+        
+        // Add event listeners
+        checkInInput.addEventListener('change', function() {
+            validateCheckInDate(this.value);
+            updateCheckOutMin(this.value);
+        });
+        
+        checkOutInput.addEventListener('change', function() {
+            validateCheckOutDate(this.value);
+        });
+        
+        // Form submission validation
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            if (!validateBookingDates()) {
+                e.preventDefault();
+            }
+        });
+    }
+    
+    function validateCheckInDate(selectedDate) {
+        const checkInInput = document.getElementById('check_in');
+        const checkInError = document.getElementById('check_in_error');
+        
+        if (isDateBooked(selectedDate)) {
+            checkInInput.classList.add('is-invalid');
+            checkInError.textContent = 'Tanggal ini sudah dibooking. Silakan pilih tanggal lain.';
+            return false;
+        } else {
+            checkInInput.classList.remove('is-invalid');
+            checkInError.textContent = '';
+            return true;
+        }
+    }
+    
+    function validateCheckOutDate(selectedDate) {
+        const checkOutInput = document.getElementById('check_out');
+        const checkOutError = document.getElementById('check_out_error');
+        const checkInDate = document.getElementById('check_in').value;
+        
+        if (isDateBooked(selectedDate)) {
+            checkOutInput.classList.add('is-invalid');
+            checkOutError.textContent = 'Tanggal ini sudah dibooking. Silakan pilih tanggal lain.';
+            return false;
+        }
+        
+        if (checkInDate && selectedDate <= checkInDate) {
+            checkOutInput.classList.add('is-invalid');
+            checkOutError.textContent = 'Tanggal check-out harus setelah tanggal check-in.';
+            return false;
+        }
+        
+        // Check if any date in the range is booked
+        if (checkInDate && hasBookedDateInRange(checkInDate, selectedDate)) {
+            checkOutInput.classList.add('is-invalid');
+            checkOutError.textContent = 'Ada tanggal yang sudah dibooking dalam rentang yang dipilih.';
+            return false;
+        }
+        
+        checkOutInput.classList.remove('is-invalid');
+        checkOutError.textContent = '';
+        return true;
+    }
+    
+    function updateCheckOutMin(checkInDate) {
+        const checkOutInput = document.getElementById('check_out');
+        if (checkInDate) {
+            const nextDay = new Date(checkInDate);
+            nextDay.setDate(nextDay.getDate() + 1);
+            checkOutInput.min = nextDay.toISOString().split('T')[0];
+            
+            // Clear checkout if it's now invalid
+            if (checkOutInput.value && checkOutInput.value <= checkInDate) {
+                checkOutInput.value = '';
+            }
+        }
+    }
+    
+    function isDateBooked(date) {
+        return bookedDates.includes(date);
+    }
+    
+    function hasBookedDateInRange(startDate, endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toISOString().split('T')[0];
+            if (isDateBooked(dateStr)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    function validateBookingDates() {
+        const checkInDate = document.getElementById('check_in').value;
+        const checkOutDate = document.getElementById('check_out').value;
+        
+        if (!checkInDate || !checkOutDate) {
+            alert('Silakan pilih tanggal check-in dan check-out.');
+            return false;
+        }
+        
+        const checkInValid = validateCheckInDate(checkInDate);
+        const checkOutValid = validateCheckOutDate(checkOutDate);
+        
+        return checkInValid && checkOutValid;
+    }
+});
+</script>
+
+<style>
+/* Style for booked dates indication */
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+/* Custom styles for date inputs to show booked dates */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+    display: block;
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 7V3m8 4V3M2 11h12M2 7h12M4 1v2m8-2v2'/%3e%3c/svg%3e") no-repeat;
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.date-input-wrapper {
+    position: relative;
+}
+
+.booked-dates-indicator {
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+</style>
+
 @endsection

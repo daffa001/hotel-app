@@ -7,6 +7,7 @@ use App\Models\Notifications;
 use App\Models\Room;
 use App\Models\RoomStatus;
 use App\Models\Type;
+use App\Models\Transaction;
 use Carbon\Carbon;
 // use Illuminate\Console\View\Components\Alert as ComponentsAlert;
 use Illuminate\Http\Request;
@@ -193,5 +194,48 @@ class RoomController extends Controller
         }
         $room = Room::where('no', $request->no)->first();
         return view('frontend.room', compact('room', 'customer', 'request'));
+    }
+
+    /**
+     * Get booked dates for a specific room
+     * API endpoint to return all booked dates for a room
+     */
+    public function getBookedDates($roomId)
+    {
+        try {
+            // Get all transactions for the specific room
+            $transactions = Transaction::where('room_id', $roomId)
+                ->where('check_out', '>=', now()) // Only get future and current bookings
+                ->get();
+
+            $bookedDates = [];
+
+            foreach ($transactions as $transaction) {
+                $checkIn = Carbon::parse($transaction->check_in);
+                $checkOut = Carbon::parse($transaction->check_out);
+
+                // Generate all dates between check-in and check-out (inclusive of check-in, exclusive of check-out)
+                for ($date = $checkIn->copy(); $date->lt($checkOut); $date->addDay()) {
+                    $bookedDates[] = $date->format('Y-m-d');
+                }
+            }
+
+            // Remove duplicates and sort
+            $bookedDates = array_unique($bookedDates);
+            sort($bookedDates);
+
+            return response()->json([
+                'success' => true,
+                'bookedDates' => array_values($bookedDates),
+                'room_id' => $roomId
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching booked dates',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -28,10 +28,13 @@
                                 @csrf
                                 <div class="border bg-light p-3 rounded mb-3">
                                     <h5 class="mb-3" style="font-size: 18px;">CHECK AVAILABILITY</h5>
+                                    <div class="alert alert-warning" role="alert" style="font-size: 12px; padding: 8px;">
+                                        <i class="fas fa-info-circle"></i> Tanggal yang sudah dibooking akan ditandai dengan warna merah
+                                    </div>
                                     <label class="form-label">Check-in</label>
-                                    <input type="date" name="from" class="form-control shadow-none mb-3">
+                                    <input type="date" name="from" class="form-control shadow-none mb-3" id="filter_check_in" min="{{ date('Y-m-d') }}">
                                     <label class="form-label">Check-out</label>
-                                    <input type="date" name="to" class="form-control shadow-none">
+                                    <input type="date" name="to" class="form-control shadow-none" id="filter_check_out" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
                                 </div>
                                 {{-- <div class="border bg-light p-3 rounded mb-3">
         <h5 class="mb-3" style="font-size: 18px;">FACILITIES</h5>
@@ -224,4 +227,77 @@
 
     </div>
     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterCheckIn = document.getElementById('filter_check_in');
+    const filterCheckOut = document.getElementById('filter_check_out');
+    
+    if (filterCheckIn && filterCheckOut) {
+        // Set minimum dates
+        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        
+        filterCheckIn.min = today;
+        filterCheckOut.min = tomorrowStr;
+        
+        // Update checkout minimum when checkin changes
+        filterCheckIn.addEventListener('change', function() {
+            if (this.value) {
+                const nextDay = new Date(this.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                filterCheckOut.min = nextDay.toISOString().split('T')[0];
+                
+                // Clear checkout if it's now invalid
+                if (filterCheckOut.value && filterCheckOut.value <= this.value) {
+                    filterCheckOut.value = '';
+                }
+            }
+        });
+        
+        // Validate checkout date
+        filterCheckOut.addEventListener('change', function() {
+            const checkInDate = filterCheckIn.value;
+            if (checkInDate && this.value <= checkInDate) {
+                alert('Tanggal check-out harus setelah tanggal check-in.');
+                this.value = '';
+            }
+        });
+    }
+});
+</script>
+
+<style>
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    color: #664d03;
+}
+
+/* Enhanced styling for date inputs */
+input[type="date"] {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="date"]:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+input[type="date"]:invalid {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+</style>
+
 @endsection
