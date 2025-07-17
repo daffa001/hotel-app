@@ -54,12 +54,32 @@ toggleDropdownPosition();
 function disableBookedDates(roomId, targetInput, inputType = 'both') {
     const url = roomId ? `/api/booked-dates?room_id=${roomId}` : '/api/booked-dates';
     
-    fetch(url)
-        .then(response => response.json())
+    console.log('Fetching booked dates for room:', roomId, 'URL:', url);
+    
+    fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status, response.statusText);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Received booked dates data:', data);
+            
             const disabledDates = data.disabled_dates || [];
             const roomSpecificDates = data.room_specific_dates || {};
             const today = new Date().toISOString().split('T')[0];
+            
+            console.log('Disabled dates:', disabledDates);
+            console.log('Room specific dates:', roomSpecificDates);
             
             // Set minimum date to today
             targetInput.setAttribute('min', today);
@@ -70,10 +90,12 @@ function disableBookedDates(roomId, targetInput, inputType = 'both') {
             
             // Create event listener for date validation
             targetInput.addEventListener('input', function() {
+                console.log('Input event triggered for date:', this.value);
                 validateSelectedDate(this, roomId, inputType);
             });
             
             targetInput.addEventListener('change', function() {
+                console.log('Change event triggered for date:', this.value);
                 validateSelectedDate(this, roomId, inputType);
             });
             
@@ -88,21 +110,29 @@ function disableBookedDates(roomId, targetInput, inputType = 'both') {
 // Enhanced date validation function
 function validateSelectedDate(input, roomId, inputType) {
     const selectedDate = input.value;
+    console.log('Validating date:', selectedDate, 'for room:', roomId, 'input type:', inputType);
+    
     if (!selectedDate) return true;
     
     const disabledDates = JSON.parse(input.getAttribute('data-disabled-dates') || '[]');
     const roomSpecificDates = JSON.parse(input.getAttribute('data-room-specific-dates') || '{}');
     
+    console.log('Checking against disabled dates:', disabledDates);
+    console.log('Room specific dates:', roomSpecificDates);
+    
     // Check if date is in the past
     const today = new Date().toISOString().split('T')[0];
     if (selectedDate < today) {
+        console.log('Date is in the past');
         showDateError(input, 'Tidak dapat memilih tanggal yang sudah berlalu.');
         return false;
     }
     
     // For specific room booking, check if the exact room is booked
     if (roomId && roomSpecificDates[selectedDate]) {
+        console.log('Room specific check - room booked on this date:', roomSpecificDates[selectedDate]);
         if (roomSpecificDates[selectedDate].includes(parseInt(roomId))) {
+            console.log('This specific room is booked on this date');
             showDateError(input, 'Kamar ini sudah dibooking pada tanggal tersebut. Silakan pilih tanggal lain.');
             return false;
         }
@@ -110,14 +140,27 @@ function validateSelectedDate(input, roomId, inputType) {
     
     // For general searches, inform if date has limited availability
     if (!roomId && disabledDates.includes(selectedDate)) {
+        console.log('General search - date has limited availability');
         const bookedRoomsCount = roomSpecificDates[selectedDate] ? roomSpecificDates[selectedDate].length : 0;
         if (bookedRoomsCount > 0) {
             showDateWarning(input, `Beberapa kamar sudah dibooking pada tanggal ini. Ketersediaan terbatas.`);
         }
     }
     
+    // Check if date is in general disabled dates list
+    if (disabledDates.includes(selectedDate)) {
+        console.log('Date is in disabled dates list');
+        if (roomId) {
+            // For specific room, we already checked above
+            console.log('Specific room booking - allowing if room not specifically booked');
+        } else {
+            console.log('General search - showing warning about limited availability');
+        }
+    }
+    
     // Reset styling for valid dates
     input.style.borderColor = '#ced4da';
+    console.log('Date validation completed - date is valid');
     return true;
 }
 
@@ -182,25 +225,36 @@ function validateDateRange(checkInInput, checkOutInput, roomId) {
 
 // Initialize date blocking when document is ready
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing date blocking');
     const today = new Date().toISOString().split('T')[0];
+    console.log('Today date:', today);
     
     // Set minimum date to today for all date inputs
     const allDateInputs = document.querySelectorAll('input[type="date"]');
+    console.log('Found date inputs:', allDateInputs.length);
     allDateInputs.forEach(function(input) {
         input.setAttribute('min', today);
+        console.log('Set min date for input:', input.name, input.id);
     });
     
     // Handle room-specific booking forms (modal forms)
     const roomIdInput = document.querySelector('input[name="room"]');
+    console.log('Room ID input found:', roomIdInput);
     if (roomIdInput) {
         const roomId = roomIdInput.value;
+        console.log('Room ID:', roomId);
         const checkInInput = document.querySelector('input[name="from"]');
         const checkOutInput = document.querySelector('input[name="to"]');
         
+        console.log('Check-in input found:', checkInInput);
+        console.log('Check-out input found:', checkOutInput);
+        
         if (checkInInput) {
+            console.log('Setting up date blocking for check-in input');
             disableBookedDates(roomId, checkInInput, 'checkin');
         }
         if (checkOutInput) {
+            console.log('Setting up date blocking for check-out input');
             disableBookedDates(roomId, checkOutInput, 'checkout');
         }
         
@@ -214,16 +268,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle general room search forms (homepage, rooms page)
     const generalForms = document.querySelectorAll('form[action="/rooms"], form[action*="rooms"]');
+    console.log('Found general forms:', generalForms.length);
     generalForms.forEach(function(form) {
         const checkInInput = form.querySelector('input[name="from"], #from');
         const checkOutInput = form.querySelector('input[name="to"], #to');
         
+        console.log('General form - check-in input:', checkInInput);
+        console.log('General form - check-out input:', checkOutInput);
+        
         if (checkInInput && !roomIdInput) {
+            console.log('Setting up general date blocking for check-in input');
             disableBookedDates(null, checkInInput, 'checkin');
         }
         if (checkOutInput && !roomIdInput) {
+            console.log('Setting up general date blocking for check-out input');
             disableBookedDates(null, checkOutInput, 'checkout');
         }
+    });
+    
+    // Fallback: Handle any remaining date inputs that weren't caught above
+    const remainingDateInputs = document.querySelectorAll('input[type="date"]:not([data-disabled-dates])');
+    console.log('Remaining date inputs to process:', remainingDateInputs.length);
+    remainingDateInputs.forEach(function(input) {
+        console.log('Processing remaining input:', input.name, input.id);
+        // Determine if this is a room-specific or general form
+        const formElement = input.closest('form');
+        const roomInput = formElement ? formElement.querySelector('input[name="room"]') : null;
+        const roomId = roomInput ? roomInput.value : null;
+        
+        console.log('Remaining input - room ID:', roomId);
+        disableBookedDates(roomId, input, 'both');
     });
     
     // Handle check-out date minimum based on check-in date

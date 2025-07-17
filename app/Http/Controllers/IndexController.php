@@ -144,17 +144,30 @@ class IndexController extends Controller
     public function getBookedDates(Request $request)
     {
         $roomId = $request->input('room_id');
+        $today = Carbon::now()->format('Y-m-d');
+        
+        // Log for debugging
+        \Log::info('getBookedDates called', [
+            'room_id' => $roomId,
+            'today' => $today,
+            'request_data' => $request->all()
+        ]);
         
         if ($roomId) {
             // Get all transactions for this specific room that haven't expired yet
             $bookedDates = Transaction::where('room_id', $roomId)
-                ->where('check_out', '>=', Carbon::now()->format('Y-m-d'))
+                ->where('check_out', '>=', $today)
                 ->get(['check_in', 'check_out', 'room_id']);
         } else {
             // Get all active transactions if no specific room is requested
-            $bookedDates = Transaction::where('check_out', '>=', Carbon::now()->format('Y-m-d'))
+            $bookedDates = Transaction::where('check_out', '>=', $today)
                 ->get(['check_in', 'check_out', 'room_id']);
         }
+        
+        \Log::info('Found booked dates', [
+            'count' => $bookedDates->count(),
+            'bookings' => $bookedDates->toArray()
+        ]);
         
         $disabledDates = [];
         $roomSpecificDates = [];
@@ -163,8 +176,8 @@ class IndexController extends Controller
             $checkIn = Carbon::parse($booking->check_in);
             $checkOut = Carbon::parse($booking->check_out);
             
-            // Add all dates between check_in and check_out (inclusive)
-            while ($checkIn->lte($checkOut)) {
+            // Add all dates between check_in and check_out (check_out is not included as room becomes available)
+            while ($checkIn->lt($checkOut)) {
                 $dateStr = $checkIn->format('Y-m-d');
                 $disabledDates[] = $dateStr;
                 
@@ -181,9 +194,13 @@ class IndexController extends Controller
         // Remove duplicates and return unique dates
         $disabledDates = array_unique($disabledDates);
         
-        return response()->json([
+        $response = [
             'disabled_dates' => array_values($disabledDates),
             'room_specific_dates' => $roomSpecificDates
-        ]);
+        ];
+        
+        \Log::info('Returning response', $response);
+        
+        return response()->json($response);
     }
 }

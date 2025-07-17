@@ -29,6 +29,13 @@ Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/rooms', [IndexController::class, 'room']);
 Route::post('/rooms', [IndexController::class, 'roompost']);
 Route::get('/api/booked-dates', [IndexController::class, 'getBookedDates']);
+Route::get('/test-booked-dates', function() {
+    return response()->json([
+        'message' => 'API endpoint is accessible',
+        'timestamp' => now(),
+        'transactions_count' => \App\Models\Transaction::count()
+    ]);
+});
 Route::get('/facilities', [IndexController::class, 'facility']);
 Route::get('/contact', [IndexController::class, 'contact']);
 Route::get('/about', [IndexController::class, 'about']);
