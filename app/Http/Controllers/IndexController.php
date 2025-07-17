@@ -140,4 +140,50 @@ class IndexController extends Controller
             ->pluck('room_id');
         return $occupiedRoomId;
     }
+
+    public function getBookedDates(Request $request)
+    {
+        $roomId = $request->input('room_id');
+        
+        if ($roomId) {
+            // Get all transactions for this specific room that haven't expired yet
+            $bookedDates = Transaction::where('room_id', $roomId)
+                ->where('check_out', '>=', Carbon::now()->format('Y-m-d'))
+                ->get(['check_in', 'check_out', 'room_id']);
+        } else {
+            // Get all active transactions if no specific room is requested
+            $bookedDates = Transaction::where('check_out', '>=', Carbon::now()->format('Y-m-d'))
+                ->get(['check_in', 'check_out', 'room_id']);
+        }
+        
+        $disabledDates = [];
+        $roomSpecificDates = [];
+        
+        foreach ($bookedDates as $booking) {
+            $checkIn = Carbon::parse($booking->check_in);
+            $checkOut = Carbon::parse($booking->check_out);
+            
+            // Add all dates between check_in and check_out (inclusive)
+            while ($checkIn->lte($checkOut)) {
+                $dateStr = $checkIn->format('Y-m-d');
+                $disabledDates[] = $dateStr;
+                
+                // Also track which room is booked on which date
+                if (!isset($roomSpecificDates[$dateStr])) {
+                    $roomSpecificDates[$dateStr] = [];
+                }
+                $roomSpecificDates[$dateStr][] = $booking->room_id;
+                
+                $checkIn->addDay();
+            }
+        }
+        
+        // Remove duplicates and return unique dates
+        $disabledDates = array_unique($disabledDates);
+        
+        return response()->json([
+            'disabled_dates' => array_values($disabledDates),
+            'room_specific_dates' => $roomSpecificDates
+        ]);
+    }
 }

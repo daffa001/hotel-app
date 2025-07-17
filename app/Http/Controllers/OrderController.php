@@ -29,16 +29,29 @@ class OrderController extends Controller
         $stayuntil = Carbon::parse($request->to);
         $room = Room::where('id', $request->room)->first();
 
-        $cektransaksi = Transaction::where('room_id', $request->room)
-            ->where(function ($query) use ($stayfrom, $stayuntil) {
-                $query->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
-                    ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
-                    ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]]);
-            })
-            ->get();
+        // Validate dates are not in the past
+        $today = Carbon::now()->startOfDay();
+        if ($stayfrom->lt($today)) {
+            Alert::error('Tanggal Tidak Valid', 'Tanggal check-in tidak boleh di masa lalu.');
+            return back();
+        }
+        
+        if ($stayuntil->lte($stayfrom)) {
+            Alert::error('Tanggal Tidak Valid', 'Tanggal check-out harus setelah tanggal check-in.');
+            return back();
+        }
 
-        if ($cektransaksi->count() > 0) {
-            Alert::error('Kamar Tidak Tersedia');
+        $conflictingBookings = $this->checkBookingConflicts($request->room, $stayfrom, $stayuntil);
+        
+        if ($conflictingBookings->count() > 0) {
+            $conflictDates = [];
+            foreach ($conflictingBookings as $booking) {
+                $checkIn = Carbon::parse($booking->check_in)->format('d M Y');
+                $checkOut = Carbon::parse($booking->check_out)->format('d M Y');
+                $conflictDates[] = $checkIn . ' - ' . $checkOut;
+            }
+            $datesList = implode(', ', $conflictDates);
+            Alert::error('Kamar Tidak Tersedia', "Kamar sudah dibooking pada tanggal: {$datesList}. Silakan pilih tanggal lain.");
             return back();
         }
         if ($request->customer == null) {
@@ -66,15 +79,30 @@ class OrderController extends Controller
         //cek transaksi apakah kamar sudah ada booking
         $stayfrom = Carbon::parse($request->check_in);
         $stayuntil = Carbon::parse($request->check_out);
-        $cektransaksi = Transaction::where('room_id', $request->room)
-            ->where(function ($query) use ($stayfrom, $stayuntil) {
-                $query->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
-                    ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
-                    ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]]);
-            })
-            ->get();
-        if ($cektransaksi->count() > 0) {
-            Alert::error('Kamar Tidak Tersedia');
+        
+        // Validate dates are not in the past
+        $today = Carbon::now()->startOfDay();
+        if ($stayfrom->lt($today)) {
+            Alert::error('Tanggal Tidak Valid', 'Tanggal check-in tidak boleh di masa lalu.');
+            return back();
+        }
+        
+        if ($stayuntil->lte($stayfrom)) {
+            Alert::error('Tanggal Tidak Valid', 'Tanggal check-out harus setelah tanggal check-in.');
+            return back();
+        }
+        
+        // Enhanced booking validation
+        $conflictingBookings = $this->checkBookingConflicts($request->room, $stayfrom, $stayuntil);
+        if ($conflictingBookings->count() > 0) {
+            $conflictDates = [];
+            foreach ($conflictingBookings as $booking) {
+                $checkIn = Carbon::parse($booking->check_in)->format('d M Y');
+                $checkOut = Carbon::parse($booking->check_out)->format('d M Y');
+                $conflictDates[] = $checkIn . ' - ' . $checkOut;
+            }
+            $datesList = implode(', ', $conflictDates);
+            Alert::error('Kamar Tidak Tersedia', "Kamar sudah dibooking pada tanggal: {$datesList}. Silakan pilih tanggal lain.");
             return back();
         }
         // ===========
@@ -172,5 +200,16 @@ class OrderController extends Controller
         ]);
 
         return $payment;
+    }
+
+    private function checkBookingConflicts($roomId, $checkIn, $checkOut)
+    {
+        return Transaction::where('room_id', $roomId)
+            ->where(function ($query) use ($checkIn, $checkOut) {
+                $query->where([['check_in', '<=', $checkIn], ['check_out', '>=', $checkOut]])
+                    ->orWhere([['check_in', '>=', $checkIn], ['check_in', '<=', $checkOut]])
+                    ->orWhere([['check_out', '>=', $checkIn], ['check_out', '<=', $checkOut]]);
+            })
+            ->get();
     }
 }
