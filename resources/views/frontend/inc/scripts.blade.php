@@ -1,6 +1,117 @@
 <script src="/bs/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- CSS untuk styling tanggal yang diblokir -->
+<style>
+/* Styling untuk input tanggal yang memiliki tanggal terblokir */
+.date-input-blocked {
+    position: relative;
+}
+
+/* Overlay untuk tanggal yang diblokir */
+.date-blocked-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(220, 53, 69, 0.1);
+    border: 2px solid #dc3545;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Styling untuk tanggal input yang memiliki tanggal terblokir */
+input[type="date"].has-blocked-dates {
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}
+
+input[type="date"].has-blocked-dates:focus {
+    border-color: #ffcd39;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+/* Styling untuk tanggal yang sepenuhnya terblokir */
+input[type="date"].fully-blocked {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+input[type="date"].fully-blocked:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Pesan warning untuk tanggal */
+.date-warning {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.date-warning.text-warning {
+    color: #856404 !important;
+}
+
+.date-warning.text-danger {
+    color: #721c24 !important;
+}
+
+.date-warning.text-info {
+    color: #0c5460 !important;
+}
+
+/* Tooltip untuk tanggal yang diblokir */
+.date-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.date-tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.date-tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.date-tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Styling untuk disabled date inputs */
+input[type="date"]:disabled {
+    background-color: #e9ecef;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+</style>
 <!-- Initialize Swiper -->
 <script>
     var swiper = new Swiper(".swiper-container", {
@@ -50,11 +161,11 @@ toggleDropdownPosition();
 </script>
 
 <script>
-// Booking Date Management
+// Booking Date Management dengan Visual Blocking
 function disableBookedDates(roomId, targetInput, inputType = 'both') {
     const url = roomId ? `/api/booked-dates?room_id=${roomId}` : '/api/booked-dates';
     
-    console.log('Fetching booked dates for room:', roomId, 'URL:', url);
+    // console.log('Setting up visual date blocking for room:', roomId, 'URL:', url);
     
     fetch(url, {
             method: 'GET',
@@ -65,21 +176,21 @@ function disableBookedDates(roomId, targetInput, inputType = 'both') {
             }
         })
         .then(response => {
-            console.log('Response status:', response.status, response.statusText);
+            // console.log('Response status:', response.status, response.statusText);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Received booked dates data:', data);
+            // console.log('Received booked dates data:', data);
             
             const disabledDates = data.disabled_dates || [];
             const roomSpecificDates = data.room_specific_dates || {};
             const today = new Date().toISOString().split('T')[0];
             
-            console.log('Disabled dates:', disabledDates);
-            console.log('Room specific dates:', roomSpecificDates);
+            // console.log('Disabled dates:', disabledDates);
+            // console.log('Room specific dates:', roomSpecificDates);
             
             // Set minimum date to today
             targetInput.setAttribute('min', today);
@@ -87,111 +198,219 @@ function disableBookedDates(roomId, targetInput, inputType = 'both') {
             // Store disabled dates in data attributes for reference
             targetInput.setAttribute('data-disabled-dates', JSON.stringify(disabledDates));
             targetInput.setAttribute('data-room-specific-dates', JSON.stringify(roomSpecificDates));
+            targetInput.setAttribute('data-room-id', roomId || '');
             
-            // Create event listener for date validation
-            targetInput.addEventListener('input', function() {
-                console.log('Input event triggered for date:', this.value);
-                validateSelectedDate(this, roomId, inputType);
-            });
+            // Apply visual styling based on blocked dates
+            applyVisualBlocking(targetInput, disabledDates, roomSpecificDates, roomId);
             
-            targetInput.addEventListener('change', function() {
-                console.log('Change event triggered for date:', this.value);
-                validateSelectedDate(this, roomId, inputType);
-            });
+            // Setup date validation with blocking
+            setupDateValidation(targetInput, roomId, inputType);
             
-            // Add visual styling for better UX
-            targetInput.style.borderColor = '#ced4da';
         })
         .catch(error => {
             console.error('Error fetching booked dates:', error);
         });
 }
 
-// Enhanced date validation function
-function validateSelectedDate(input, roomId, inputType) {
-    const selectedDate = input.value;
-    console.log('Validating date:', selectedDate, 'for room:', roomId, 'input type:', inputType);
+// Apply visual styling untuk tanggal yang diblokir
+function applyVisualBlocking(input, disabledDates, roomSpecificDates, roomId) {
+    // Create wrapper untuk tooltip jika belum ada
+    if (!input.parentElement.classList.contains('date-tooltip')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'date-tooltip';
+        input.parentElement.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+        
+        // Create tooltip text
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltiptext';
+        wrapper.appendChild(tooltip);
+    }
     
-    if (!selectedDate) return true;
+    // Update styling berdasarkan data
+    if (roomId && Object.keys(roomSpecificDates).length > 0) {
+        // Untuk booking kamar spesifik
+        const hasBlockedDates = Object.keys(roomSpecificDates).some(date => 
+            roomSpecificDates[date].includes(parseInt(roomId))
+        );
+        
+        if (hasBlockedDates) {
+            input.classList.add('has-blocked-dates');
+            updateTooltip(input, 'Beberapa tanggal tidak tersedia untuk kamar ini');
+        }
+    } else if (disabledDates.length > 0) {
+        // Untuk pencarian umum
+        input.classList.add('has-blocked-dates');
+        updateTooltip(input, `${disabledDates.length} tanggal memiliki ketersediaan terbatas`);
+    }
+}
+
+// Update tooltip content
+function updateTooltip(input, message) {
+    const wrapper = input.closest('.date-tooltip');
+    if (wrapper) {
+        const tooltip = wrapper.querySelector('.tooltiptext');
+        if (tooltip) {
+            tooltip.textContent = message;
+        }
+    }
+}
+
+// Setup date validation dengan blocking visual
+function setupDateValidation(input, roomId, inputType) {
+    // Remove existing event listeners to prevent duplicates
+    const newInput = input.cloneNode(true);
+    input.parentNode.replaceChild(newInput, input);
+    
+    // Add new event listeners
+    newInput.addEventListener('input', function(e) {
+        validateAndBlockDate(this, roomId, inputType, e);
+    });
+    
+    newInput.addEventListener('change', function(e) {
+        validateAndBlockDate(this, roomId, inputType, e);
+    });
+    
+    newInput.addEventListener('click', function(e) {
+        validateAndBlockDate(this, roomId, inputType, e);
+    });
+    
+    // Prevent manual typing of blocked dates
+    newInput.addEventListener('keydown', function(e) {
+        // Allow navigation keys
+        const allowedKeys = ['Tab', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+        if (allowedKeys.includes(e.key)) {
+            return;
+        }
+        
+        // Block other keys to prevent manual date entry
+        if (this.classList.contains('fully-blocked')) {
+            e.preventDefault();
+        }
+    });
+}
+
+// Fungsi untuk validasi dan blocking tanggal dengan visual feedback
+function validateAndBlockDate(input, roomId, inputType, event) {
+    const selectedDate = input.value;
+    // console.log('Validating and blocking date:', selectedDate, 'for room:', roomId);
+    
+    if (!selectedDate) {
+        clearDateStyling(input);
+        return true;
+    }
     
     const disabledDates = JSON.parse(input.getAttribute('data-disabled-dates') || '[]');
     const roomSpecificDates = JSON.parse(input.getAttribute('data-room-specific-dates') || '{}');
     
-    console.log('Checking against disabled dates:', disabledDates);
-    console.log('Room specific dates:', roomSpecificDates);
-    
     // Check if date is in the past
     const today = new Date().toISOString().split('T')[0];
     if (selectedDate < today) {
-        console.log('Date is in the past');
-        showDateError(input, 'Tidak dapat memilih tanggal yang sudah berlalu.');
+        // console.log('Date is in the past - blocking');
+        blockDateSelection(input, 'Tidak dapat memilih tanggal yang sudah berlalu', 'past');
         return false;
     }
     
     // For specific room booking, check if the exact room is booked
     if (roomId && roomSpecificDates[selectedDate]) {
-        console.log('Room specific check - room booked on this date:', roomSpecificDates[selectedDate]);
         if (roomSpecificDates[selectedDate].includes(parseInt(roomId))) {
-            console.log('This specific room is booked on this date');
-            showDateError(input, 'Kamar ini sudah dibooking pada tanggal tersebut. Silakan pilih tanggal lain.');
+            // console.log('Room specifically booked on this date - blocking');
+            blockDateSelection(input, 'Kamar ini sudah dibooking pada tanggal tersebut', 'booked');
             return false;
         }
     }
     
-    // For general searches, inform if date has limited availability
+    // For general searches, check availability
     if (!roomId && disabledDates.includes(selectedDate)) {
-        console.log('General search - date has limited availability');
         const bookedRoomsCount = roomSpecificDates[selectedDate] ? roomSpecificDates[selectedDate].length : 0;
         if (bookedRoomsCount > 0) {
-            showDateWarning(input, `Beberapa kamar sudah dibooking pada tanggal ini. Ketersediaan terbatas.`);
+            showAvailabilityWarning(input, `${bookedRoomsCount} kamar sudah dibooking pada tanggal ini`);
+            return true; // Allow selection but show warning
         }
     }
     
-    // Check if date is in general disabled dates list
-    if (disabledDates.includes(selectedDate)) {
-        console.log('Date is in disabled dates list');
-        if (roomId) {
-            // For specific room, we already checked above
-            console.log('Specific room booking - allowing if room not specifically booked');
-        } else {
-            console.log('General search - showing warning about limited availability');
-        }
-    }
-    
-    // Reset styling for valid dates
-    input.style.borderColor = '#ced4da';
-    console.log('Date validation completed - date is valid');
+    // Date is valid
+    clearDateStyling(input);
+    clearDateMessages(input);
+    // console.log('Date is valid');
     return true;
 }
 
-// Show error message and reset input
-function showDateError(input, message) {
-    alert(message);
+// Block date selection dengan visual feedback
+function blockDateSelection(input, message, type) {
+    // Clear the input value
     input.value = '';
-    input.style.borderColor = '#dc3545';
-    input.focus();
-}
-
-// Show warning message but keep the date
-function showDateWarning(input, message) {
-    // Create or update warning message
-    let warningMsg = input.parentElement.querySelector('.date-warning');
-    if (!warningMsg) {
-        warningMsg = document.createElement('small');
-        warningMsg.className = 'date-warning text-warning mt-1';
-        input.parentElement.appendChild(warningMsg);
-    }
-    warningMsg.textContent = message;
     
-    // Remove warning after 5 seconds
+    // Apply styling based on block type
+    if (type === 'booked') {
+        input.classList.remove('has-blocked-dates');
+        input.classList.add('fully-blocked');
+    } else if (type === 'past') {
+        input.classList.add('fully-blocked');
+    }
+    
+    // Show message below input
+    showDateMessage(input, message, 'danger');
+    
+    // Update tooltip
+    updateTooltip(input, message);
+    
+    // Temporarily disable input to prevent immediate re-selection
+    input.setAttribute('data-blocked-until', Date.now() + 1000); // Block for 1 second
+    
+    // Focus on input after a short delay to help user try again
     setTimeout(() => {
-        if (warningMsg && warningMsg.parentElement) {
-            warningMsg.remove();
+        input.removeAttribute('data-blocked-until');
+        if (type === 'booked') {
+            // For booked dates, suggest next available date
+            const roomId = input.getAttribute('data-room-id');
+            suggestNextAvailableDate(input, roomId);
+            input.focus();
         }
-    }, 5000);
+    }, 1500);
 }
 
-// Check date range for overlapping bookings
+// Show availability warning tanpa blocking
+function showAvailabilityWarning(input, message) {
+    input.classList.remove('fully-blocked');
+    input.classList.add('has-blocked-dates');
+    showDateMessage(input, message + ' - Ketersediaan terbatas', 'warning');
+    updateTooltip(input, message);
+}
+
+// Clear date styling
+function clearDateStyling(input) {
+    input.classList.remove('fully-blocked', 'has-blocked-dates');
+    input.style.borderColor = '';
+    input.style.backgroundColor = '';
+}
+
+// Show message below date input
+function showDateMessage(input, message, type) {
+    clearDateMessages(input);
+    
+    const messageElement = document.createElement('small');
+    messageElement.className = `date-warning text-${type}`;
+    messageElement.textContent = message;
+    
+    // Insert after input or its wrapper
+    const wrapper = input.closest('.date-tooltip') || input;
+    wrapper.parentNode.insertBefore(messageElement, wrapper.nextSibling);
+}
+
+// Clear all date messages
+function clearDateMessages(input) {
+    const wrapper = input.closest('.date-tooltip') || input;
+    let nextElement = wrapper.nextSibling;
+    
+    while (nextElement && nextElement.classList && nextElement.classList.contains('date-warning')) {
+        const toRemove = nextElement;
+        nextElement = nextElement.nextSibling;
+        toRemove.remove();
+    }
+}
+
+// Check date range for overlapping bookings dengan visual blocking
 function validateDateRange(checkInInput, checkOutInput, roomId) {
     const checkInDate = checkInInput.value;
     const checkOutDate = checkOutInput.value;
@@ -201,13 +420,13 @@ function validateDateRange(checkInInput, checkOutInput, roomId) {
     const disabledDates = JSON.parse(checkInInput.getAttribute('data-disabled-dates') || '[]');
     const roomSpecificDates = JSON.parse(checkInInput.getAttribute('data-room-specific-dates') || '{}');
     
-    // Generate all dates in the range
+    // Generate all dates in the range (excluding check-out date)
     const startDate = new Date(checkInDate);
     const endDate = new Date(checkOutDate);
     const dateRange = [];
     
     const currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
+    while (currentDate < endDate) { // Use < instead of <= to exclude check-out date
         dateRange.push(currentDate.toISOString().split('T')[0]);
         currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -215,12 +434,56 @@ function validateDateRange(checkInInput, checkOutInput, roomId) {
     // Check for conflicts in the range
     for (const date of dateRange) {
         if (roomId && roomSpecificDates[date] && roomSpecificDates[date].includes(parseInt(roomId))) {
-            showDateError(checkOutInput, `Kamar ini sudah dibooking pada rentang tanggal yang dipilih (${date}). Silakan pilih tanggal lain.`);
+            const conflictDate = new Date(date).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            blockDateSelection(checkOutInput, `Kamar sudah dibooking pada ${conflictDate}`, 'booked');
             return false;
         }
     }
     
+    // Range is valid
+    clearDateStyling(checkInInput);
+    clearDateStyling(checkOutInput);
+    clearDateMessages(checkInInput);
+    clearDateMessages(checkOutInput);
     return true;
+}
+
+// Function to suggest next available date
+function suggestNextAvailableDate(input, roomId) {
+    const disabledDates = JSON.parse(input.getAttribute('data-disabled-dates') || '[]');
+    const roomSpecificDates = JSON.parse(input.getAttribute('data-room-specific-dates') || '{}');
+    const today = new Date();
+    
+    // Start from tomorrow
+    let checkDate = new Date(today);
+    checkDate.setDate(checkDate.getDate() + 1);
+    
+    // Look for next available date (max 30 days ahead)
+    for (let i = 0; i < 30; i++) {
+        const dateStr = checkDate.toISOString().split('T')[0];
+        
+        let isAvailable = true;
+        if (roomId && roomSpecificDates[dateStr]) {
+            isAvailable = !roomSpecificDates[dateStr].includes(parseInt(roomId));
+        }
+        
+        if (isAvailable) {
+            const formattedDate = checkDate.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            showDateMessage(input, `Saran: ${formattedDate} tersedia`, 'info');
+            break;
+        }
+        
+        checkDate.setDate(checkDate.getDate() + 1);
+    }
 }
 
 // Initialize date blocking when document is ready
