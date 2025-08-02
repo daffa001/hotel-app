@@ -4,6 +4,12 @@
 @endsection
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 <div class="my-5 px-4">
     <h2 class="fw-bold h-font text-center">Kamar Hotel </h2>
     <p class="h5 mt-3 text-center">{{ $roomsCount }} Rooms Availlable</p>

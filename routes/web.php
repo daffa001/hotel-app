@@ -38,10 +38,18 @@ Route::post('/order', [OrderController::class, 'index']);
 Route::post('/order/post', [OrderController::class, 'order']);
 Route::get('/bayar/{id}', [OrderController::class, 'pembayaran']);
 Route::post('/bayar', [OrderController::class, 'bayar']);
+
+Route::post('/cart/post',[CartController::class, 'checkout']);
+Route::post('/cart/checkout',[CartController::class, 'checkoutPage']);
+Route::get('/cart/payment',[CartController::class, 'payment']);
+Route::post('/cart/delete',[CartController::class, 'delete']);
+
+            
 // (Hotel) Payment Dashboard Function & invoice
 Route::post('/dashboard/payment/tolak', [PaymentController::class, 'tolak']);
 Route::post('/dashboard/payment/confirm', [PaymentController::class, 'confirmation']);
 Route::get('/dashboard/payment/invoice', [TransactionController::class, 'paymentinvoice']);
+
 // (Hotel) Room Index
 Route::get('/rooms/{no}', [RoomController::class, 'roomshow']);
 Route::post('/rooms/{no}', [RoomController::class, 'roomshowpost']);

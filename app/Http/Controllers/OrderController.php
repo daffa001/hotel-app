@@ -10,6 +10,7 @@ use App\Models\PaymentMethod;
 use App\Models\Room;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Cart;
 use App\Notifications\NewRoomReservationDownPayment;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -51,11 +52,31 @@ class OrderController extends Controller
         $price = $room->price;
         $dayDifference = $stayfrom->diffindays($stayuntil);
         $total = $price * $dayDifference;
+        // OPSI 1: CEK DULU APAKAH SUDAH ADA DI CART
+        $existingCart = Cart::where('c_id', $customer->id)
+            ->where('rooms_id', $request->room)
+            ->where('check_in', $stayfrom->format('Y-m-d'))
+            ->where('check_out', $stayuntil->format('Y-m-d'))
+            ->first();
+
+        if (!$existingCart) {
+            // Buat cart baru jika belum ada
+            Cart::create([
+                'c_id' => $customer->id,
+                'rooms_id' => $request->room,
+                'check_in' => $stayfrom->format('Y-m-d'),
+                'check_out' => $stayuntil->format('Y-m-d'),
+                'price_day' => $price,
+                'price' => $total,
+                'status' => 'pending',
+            ]);
+        }
         $paymentmethodnotid = [1];
         $paymentmet = PaymentMethod::whereNotIn('id', $paymentmethodnotid)->get();
 
-        return view('frontend.order', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
+        // return view('frontend.order', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
         // return view('user.cart', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
+        return redirect('/rooms');
     }
 
     public function order(Request $request)
@@ -104,12 +125,13 @@ class OrderController extends Controller
 
     public function invoice($id)
     {
-        $p = Payment::where('id', $id)->with('Customer', 'Transaction', 'Methode')->first();
+        $p = Payment::where('id', $id)->with('Customer', 'Methode')->first();
+        $tr = Transaction::where('payments_id',$id)->with('Room')->paginate(10);
         if ($p->status == 'Pending') {
             return abort(404);
         }
         // dd($p);
-        return view('frontend.invoice', compact('p'));
+        return view('frontend.invoice', compact('p','tr'));
     }
 
     public function pembayaran($id)

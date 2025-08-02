@@ -24,10 +24,16 @@ class Transaction extends Model
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
-    public function Payments()
+    public function Payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsTo(Payment::class, 'payments_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'transaction_id'); // Pastikan foreign key benar
+    }
+
 
     public function getTotalPrice()
     {

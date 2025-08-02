@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreign('c_id')->references('id')->on('customers')->onDelete('cascade');
             $table->bigInteger('room_id')->index()->unsigned();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->bigInteger('payments_id')->index()->unsigned();
+            $table->foreign('payments_id')->references('id')->on('payments')->onDelete('cascade');
+            $table->decimal('price', 65, 2);
             $table->date('check_in');
             $table->date('check_out');
             $table->string('status');

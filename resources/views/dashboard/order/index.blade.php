@@ -66,11 +66,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($transaction as $t)
+                            @foreach ($payment as $t)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $t->Customer->name ?? '-' }}</td>
-                                    <td>{{ $t->Room->no }}</td>
+                                    <td>{{ $t->transaction->Room->no }}</td>
                                     <td>{{ $t->check_in->isoFormat('D MMM Y') }}</td>
                                     <td>{{ $t->check_out->isoFormat('D MMM Y') }}</td>
                                     <td>{{ $t->check_in->diffindays($t->check_out) }} Day</td>

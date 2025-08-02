@@ -39,16 +39,16 @@
         </div>
         <div class="col-lg-7 col-md-12 px-4">
             @foreach ($his as $h)
-            <div class="card mb-4 border-0 shadow">
+            <div class="card mb-4 border-0 shadow ">
                 <div class="d-flex g-0 p-3 justify-content-between">
 
-                    <div class="col-md-5 px-lg-3 px-md-3 px-0">
+                    <div class="col-md-8 px-lg-3 px-md-3 px-0">
                         <h5 class="mb-1">#{{ $loop->iteration }} {{ $h->invoice }}</h5>
                         <div class="guests">
                             <h5 class="mb-1"></h5>
 
                         </div>
-                        <div class="features mb-3 mt-3">
+                        <div class="features mb-3 mt-3 ">
                             <h6 class="mb-1">Status @if ($h->status == 'Pending' and $h->image != null)
                                 <span style="color:red">{{ $h->status }}</span> | Sudah Bayar
                                 @elseif ($h->status == 'Pending' and $h->image == null)
@@ -57,9 +57,42 @@
                                 <span style="color:green">{{ $h->status }}</span>
                                 @endif
                             </h6>
-                            <h6 class="mb-1">Total IDR {{ number_format($h->price) }}</h6>
-                            <h6 class="mb-1">Room {{$h->transaction->room->type->name}}</h6>
-                            <h6 class="mb-1">Room Number # {{$h->transaction->room->no }} </h6>
+                            <table class="table" >
+
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <h6 class="mb-1">Room Number</h6>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-1">Room</h6>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-1">Invoice</h6>
+                                        </td>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <h6 class="mb-1">{{ $h->room->no  }}</h6>
+
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-1">{{ $h->room->type->name }}</h6>
+
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-1">#{{$h->payment->invoice }}</h6>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
                         </div>
 
                     </div>
@@ -71,20 +104,20 @@
                         <a class="btn btn-sm w-100 btn-secondary shadow-none"
                             style="pointer-events: none;
                         cursor: default;"
-                            href="/invoice/{{ $h->id }}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->payments_id }}">Lihat Invoice</a>
                         @elseif ($h->status == 'Pending' and $h->image != null)
                         <a class="btn btn-sm w-100 btn-danger shadow-none mb-2"
-                            href="/bayar/{{ $h->id }}"
+                            href="/bayar/{{ $h->payments_id }}"
                             style="pointer-events: none;
                             cursor: default;">Tunggu
                             Konfirmasi</a>
                         <a class="btn btn-sm w-100 btn-secondary shadow-none"
                             style="pointer-events: none;
                         cursor: default;"
-                            href="/invoice/{{ $h->id }}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->payments_id }}">Lihat Invoice</a>
                         @else
                         <a class="btn btn-sm w-100 btn-dark shadow-none"
-                            href="/invoice/{{ $h->id }}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->payments_id}}">Lihat Invoice</a>
                         @endif
 
 

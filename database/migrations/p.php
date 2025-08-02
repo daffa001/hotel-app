@@ -20,9 +20,11 @@ return new class extends Migration
             $table->foreign('c_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('transaction_id')->index()->unsigned();
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade')->onUpdate('cascade');
+
             $table->bigInteger('payment_method_id')->index()->unsigned();
+
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade')->onUpdate('cascade');
-            $table->decimal('price',65,2);
+            $table->decimal('price', 65, 2);
             $table->string('status');
             $table->string('image')->nullable();
             $table->timestamps();

@@ -9,7 +9,7 @@ class Cart extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    protected $tables = 'cart';
+    protected $tables = 'carts';
 
     public function Transaction()
     {
@@ -18,8 +18,9 @@ class Cart extends Model
 
     public function Room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class, 'rooms_id');
     }
+
 
     public function Customer()
     {

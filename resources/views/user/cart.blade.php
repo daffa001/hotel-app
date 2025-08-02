@@ -5,9 +5,16 @@
 @endsection
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="container my-5">
     <h2 class="mb-4">Keranjang Pemesanan Kamar</h2>
-    
+
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle">
             <thead class="table-dark">
@@ -17,54 +24,45 @@
                     <th>Nomor Kamar</th>
                     <th>Check In</th>
                     <th>Check Out</th>
-                    <th>Harga</th>
+                    <th>Harga/Hari</th>
+                    <th>Total</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
+                @php
+                $no = 0;
+                $total = 0;
+                @endphp
+                @foreach ($his as $h)
                 <tr>
-                    <td>1</td>
-                    <td>Deluxe</td>
-                    <td>101</td>
-                    <td><input type="date" class="form-control" value="2025-07-12"></td>
-                    <td><input type="date" class="form-control" value="2025-07-14"></td>
-                    <td>Rp 1.200.000</td>
+                    <td>{{$no=$no+1}}</td>
+                    <td>{{ $h->room->type->name }}</td>
+                    <td>{{ $h->room->no }}</td>
+                    <td><input type="date" class="form-control" value="{{ $h->check_in }}"></td>
+                    <td><input type="date" class="form-control" value="{{ $h->check_out }}"></td>
+                    <td>{{ $h->room->price }}</td>
+                    <td>{{ $h->price }}</td>
                     <td>
-                        <button class="btn btn-sm btn-danger">Hapus</button>
+                        <form action="/cart/delete" method="POST">
+                             @csrf
+                            <input type="hidden" name="cart_id" value="{{$h->id}}">
+                            <button class="btn btn-sm btn-danger">Hapus</button>
+                        </form>
                     </td>
+                    <input type="hidden" value="{{$total=$total+$h->price}}">
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Suite</td>
-                    <td>202</td>
-                    <td><input type="date" class="form-control" value="2025-07-13"></td>
-                    <td><input type="date" class="form-control" value="2025-07-15"></td>
-                    <td>Rp 2.400.000</td>
-                    <td>
-                        <button class="btn btn-sm btn-danger">Hapus</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Standard</td>
-                    <td>305</td>
-                    <td><input type="date" class="form-control" value="2025-07-14"></td>
-                    <td><input type="date" class="form-control" value="2025-07-16"></td>
-                    <td>Rp 800.000</td>
-                    <td>
-                        <button class="btn btn-sm btn-danger">Hapus</button>
-                    </td>
-                </tr>
+                @endforeach
                 <tr class="table-secondary fw-bold">
-                    <td colspan="5" class="text-end">Total</td>
-                    <td colspan="2">Rp 4.400.000</td>
+                    <td colspan="6" class="text-end">Total</td>
+                    <td colspan="2">Rp {{$total}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-    <div class="text-end mt-3">
-        <a href="#" class="btn btn-success">Lanjut ke Checkout</a>
-    </div>
+    <form action="/cart/checkout" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success">Lanjut ke Checkout</button>
+    </form>
 </div>
 @endsection

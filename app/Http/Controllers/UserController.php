@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Transaction;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -246,7 +247,10 @@ class UserController extends Controller
         $id = Auth()->user()->Customer->id;
         $user = Auth()->user();
         $not = [1];
-        $his = Payment::where('c_id', $id)->orderby('id', 'desc')->wherenotin('payment_method_id', $not)->paginate(10);
+        $his = Transaction::where('c_id', $id)
+            ->with('Payment')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
         // $p = Payment::where('c_id', $id)->with('Customer', 'Transaction', 'Methode')->first();
 
