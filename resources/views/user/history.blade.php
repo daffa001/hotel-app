@@ -42,7 +42,7 @@
             <div class="card mb-4 border-0 shadow ">
                 <div class="d-flex g-0 p-3 justify-content-between">
 
-                    <div class="col-md-8 px-lg-3 px-md-3 px-0">
+                    <div class="col-lg-9 col-md-12 px-4 ">
                         <h5 class="mb-1">#{{ $loop->iteration }} {{ $h->invoice }}</h5>
                         <div class="guests">
                             <h5 class="mb-1"></h5>
@@ -57,39 +57,42 @@
                                 <span style="color:green">{{ $h->status }}</span>
                                 @endif
                             </h6>
-                            <table class="table" >
+                            <table class="table">
 
                                 <thead>
                                     <tr>
                                         <td>
-                                            <h6 class="mb-1">Room Number</h6>
-                                        </td>
-                                        <td>
                                             <h6 class="mb-1">Room</h6>
                                         </td>
                                         <td>
-                                            <h6 class="mb-1">Invoice</h6>
+                                            <h6 class="mb-1">Check in</h6>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-1">Check out</h6>
                                         </td>
                                     </tr>
                                 </thead>
 
                                 <tbody>
+                                    @php
+                                    $matchedTransaction = $transaction->where('payments_id', $h->id);
+                                    @endphp
+
+                                    @if ($matchedTransaction->count())
+                                    @foreach ($matchedTransaction as $m)
                                     <tr>
-                                        <td>
-                                            <h6 class="mb-1">{{ $h->room->no  }}</h6>
-
-                                        </td>
-                                        <td>
-                                            <h6 class="mb-1">{{ $h->room->type->name }}</h6>
-
-                                        </td>
-                                        <td>
-                                            <h6 class="mb-1">#{{$h->payment->invoice }}</h6>
-
-                                        </td>
+                                        <td>{{ $m->room->type->name }}</td>
+                                        <td>{{ $m->check_in->format('d M Y') }}</td>
+                                        <td>{{ $m->check_out->format('d M Y') }}</td>
                                     </tr>
-
+                                    @endforeach
+                                    @else
+                                    <tr>
+                                        <td colspan="3" class="text-center">Tidak ada kamar</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
+
 
                             </table>
 
@@ -98,26 +101,27 @@
                     </div>
                     <div class="col-md-3 mt-lg-0 mt-md-0 mt-4 text-center">
                         <h6 class="mb-4 text-dark"> {{ $h->created_at }} </h6>
-                        @if ($h->status == 'Pending' and $h->image == null)
+
+                        @if ($h->status == 'Denied' and $h->image == null)
                         <a class="btn btn-sm w-100 btn-danger shadow-none mb-2"
-                            href="/bayar/{{ $h->transaction->id }}">Bayar Sekarang</a>
+                            href="/cart/checkout/{{ $h->id }}">Bayar Sekarang</a>
                         <a class="btn btn-sm w-100 btn-secondary shadow-none"
                             style="pointer-events: none;
                         cursor: default;"
-                            href="/invoice/{{ $h->payments_id }}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->id }}">Lihat Invoice</a>
                         @elseif ($h->status == 'Pending' and $h->image != null)
                         <a class="btn btn-sm w-100 btn-danger shadow-none mb-2"
-                            href="/bayar/{{ $h->payments_id }}"
+                            href="/bayar/{{ $h->id }}"
                             style="pointer-events: none;
                             cursor: default;">Tunggu
                             Konfirmasi</a>
                         <a class="btn btn-sm w-100 btn-secondary shadow-none"
                             style="pointer-events: none;
                         cursor: default;"
-                            href="/invoice/{{ $h->payments_id }}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->id }}">Lihat Invoice</a>
                         @else
                         <a class="btn btn-sm w-100 btn-dark shadow-none"
-                            href="/invoice/{{ $h->payments_id}}">Lihat Invoice</a>
+                            href="/invoice/{{ $h->id}}">Lihat Invoice</a>
                         @endif
 
 
@@ -128,7 +132,6 @@
 
             </div>
             @endforeach
-            {!! $his->links() !!}
         </div>
 
 

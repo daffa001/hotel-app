@@ -70,16 +70,16 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $t->Customer->name ?? '-' }}</td>
-                                    <td>{{ $t->transaction->Room->no }}</td>
+                                    <td>{{ $t->Room->no }}</td>
                                     <td>{{ $t->check_in->isoFormat('D MMM Y') }}</td>
                                     <td>{{ $t->check_out->isoFormat('D MMM Y') }}</td>
                                     <td>{{ $t->check_in->diffindays($t->check_out) }} Day</td>
                                     <td>Rp.{{ number_format($t->getTotalPrice()) }}</td>
-                                    <td>Rp. {{ number_format($t->getTotalPayment()) }}</td>
-                                    <td>Rp. {{ number_format($t->getTotalPrice() - $t->getTotalPayment()) }}</td>
+                                    <td>Rp. {{ number_format($t->payment->price) }}</td>
+                                    <td>Rp. {{ number_format($t->getTotalPrice() - $t->payment->price) }}</td>
                                     <td>
                                         @php
-                                            $insufficient = $t->getTotalPrice() - $t->getTotalPayment();
+                                            $insufficient = $t->getTotalPrice() - $t->payment->price;
                                         @endphp
                                         <a @if ($insufficient <= 0) style="pointer-events: none;
                                                         cursor: default;color:gray" @endif

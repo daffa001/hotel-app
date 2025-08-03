@@ -43,6 +43,39 @@ class CartController extends Controller
         return view('frontend.cart.order', compact('his', 'paymentmet'));
     }
 
+    public function checkoutPageID($id)
+    {
+        // dd($t->Payments[0]->Methode->nama);
+        $paymentmethodnotid = [1];
+        $paymentmet = PaymentMethod::whereNotIn('id', $paymentmethodnotid)->get();
+        $his = Transaction::where('payments_id', $id)->orderBy('id', 'desc')->paginate(10);
+        // dd($pay->id);
+        return view('frontend.cart.orderID', compact('his', 'paymentmet'));
+    }
+public function checkoutID(Request $request, $id)
+{
+    $userId = auth()->id();
+
+    // Validasi file gambar bukti
+    $validatedData = $request->validate([
+        'image' => 'required|image|file',
+    ]);
+
+    // Simpan gambar ke storage
+    $image = $request->file('image')->store('bukti-images', 'public');
+
+    // Cari data Payment yang sesuai ID
+    $payment = Payment::findOrFail($id);
+
+    // Update kolom image dan status
+    $payment->update([
+        'image' => $image,
+        'status' => 'Pending', // atau 'Sudah Bayar', tergantung konvensi kamu
+    ]);
+
+    return redirect('/history/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
+}
+
 
     public function checkout(Request $request)
     {
@@ -79,7 +112,7 @@ class CartController extends Controller
             'invoice' => $inv,
             'payment_method_id' => $request->payment_method_id,
             'price' => $total,
-            'status' => 'Pay',
+            'status' => 'Pending',
             'image' => $image
         ]);
         foreach ($carts as $c) {
@@ -109,5 +142,4 @@ class CartController extends Controller
 
         return redirect('/cart/')->with('success', 'Item berhasil dihapus dari keranjang.');
     }
-
 }

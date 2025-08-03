@@ -34,7 +34,7 @@ class TransactionController extends Controller
             abort(404);
         }
         $today = Carbon::now()->isoFormat('Y-M-D');
-        $payment = Payment::with('Customer', 'Transaction')->orderby('id', 'desc')->get();
+        $payment = Transaction::with('Customer', 'Payment')->orderby('id', 'desc')->get();
         return view('dashboard.order.index', compact('payment'));
     }
 

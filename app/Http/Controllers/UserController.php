@@ -247,13 +247,18 @@ class UserController extends Controller
         $id = Auth()->user()->Customer->id;
         $user = Auth()->user();
         $not = [1];
-        $his = Transaction::where('c_id', $id)
-            ->with('Payment')
+        // $his = Payment::where('c_id', $id)
+        //     ->with('Payment')
+        //     ->orderBy('id', 'desc')
+        //     ->paginate(10);
+        $his = Payment::where('c_id', $id)
+            ->with('Customer')
             ->orderBy('id', 'desc')
             ->paginate(10);
+        $transaction = Transaction::where('c_id', $id)->with('Customer','Room')->orderBy('id', 'desc')->get();
 
         // $p = Payment::where('c_id', $id)->with('Customer', 'Transaction', 'Methode')->first();
 
-        return view('user.history', compact('his', 'user'));
+        return view('user.history', compact('his', 'user','transaction'));
     }
 }

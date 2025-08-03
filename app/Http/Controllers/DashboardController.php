@@ -48,7 +48,9 @@ class DashboardController extends Controller
         $previousMonthNumber = $currentMonthNumber - 1;
         $previousMonth = Carbon::createFromDate(null, $previousMonthNumber)->format('M');
         $transactionCount = Transaction::where('status', 'Reservation')->count();
-        $countPreviousMonth = $count["Jul"];
+        $previousMonth = Carbon::createFromDate(null, $previousMonthNumber)->format('M');
+        $countPreviousMonth = $count[$previousMonth] ?? 0;
+
         // dd($countPreviousMonth);
         $percentage = $countPreviousMonth > 0 ? ($monthCount / $countPreviousMonth) * 100 : 0;
 

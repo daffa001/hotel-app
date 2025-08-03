@@ -50,18 +50,18 @@ class Transaction extends Model
         return $day . ' ' . $plural;
     }
 
-    public function getTotalPayment()
-    {
-        $totalPayment = 0;
-        foreach ($this->Payments as $payment) {
-            if ($payment->status == 'Pending') {
-                $totalPayment = 0;
-            } else {
-                $totalPayment += $payment->price;
-            }
-        }
-        return $totalPayment;
-    }
+    // public function getTotalPayment()
+    // {
+    //     $totalPayment = 0;
+    //     foreach ($this->Payment as $payment) {
+    //         if ($payment->status == 'Pending') {
+    //             $totalPayment = 0;
+    //         } else {
+    //             $totalPayment += $payment->price;
+    //         }
+    //     }
+    //     return $totalPayment;
+    // }
 
     public function getMinimumDownPayment()
     {
