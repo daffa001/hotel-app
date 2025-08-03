@@ -22,7 +22,7 @@ class PaymentController extends Controller
             abort(404);
         }
         $pay = Payment::with('Customer')
-            ->whereIn('status', ['pending','Denied'])
+            ->whereIn('status', ['pending', 'Denied'])
             ->orderBy('id', 'desc')
             ->get();;
 
@@ -31,7 +31,7 @@ class PaymentController extends Controller
             ->orderBy('id', 'desc')
             ->get();;
         $transaction = Transaction::with('Customer')->orderBy('id', 'desc')->get();
-        return view('dashboard.payment.index', compact('pay', 'transaction','paySucces'));
+        return view('dashboard.payment.index', compact('pay', 'transaction', 'paySucces'));
     }
     public function debt($id)
     {
@@ -79,6 +79,7 @@ class PaymentController extends Controller
             abort(404);
         }
         $pay = Payment::where('id', $id)->first();
+        $transaction = Transaction::where('payments_id', $id)->with('Customer', 'Room')->first();
         if ($request['nid']) {
             $notif = Notifications::where('id', $request->nid)->first();
             $notif->status = 'read';
@@ -90,7 +91,7 @@ class PaymentController extends Controller
             }
         }
 
-        return view('dashboard.payment.invoice', compact('pay'));
+        return view('dashboard.payment.invoice', compact('pay','transaction'));
     }
 
     public function confirmation(Request $request)
