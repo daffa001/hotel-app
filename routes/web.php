@@ -11,6 +11,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,9 @@ Route::get('/myaccount/{id}/delete-foto', [UserController::class, 'delfoto']);
 Route::post('/myaccount/{id}/update', [UserController::class, 'updatefront']);
 Route::get('/myaccount', [UserController::class, 'profile']);
 Route::get('/history', [UserController::class, 'history']);
+Route::get('/cart', [CartController::class, 'index']);
+Route::post('/cart', [CartController::class, 'index']);
+
 // (Hotel) Index route
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/rooms', [IndexController::class, 'room']);
@@ -35,10 +39,20 @@ Route::post('/order', [OrderController::class, 'index']);
 Route::post('/order/post', [OrderController::class, 'order']);
 Route::get('/bayar/{id}', [OrderController::class, 'pembayaran']);
 Route::post('/bayar', [OrderController::class, 'bayar']);
+
+Route::post('/cart/post',[CartController::class, 'checkout']);
+Route::post('/cart/post/{id}',[CartController::class, 'checkoutID']);
+Route::post('/cart/checkout',[CartController::class, 'checkoutPage']);
+Route::get('/cart/checkout/{id}',[CartController::class, 'checkoutPageID']);
+Route::get('/cart/payment',[CartController::class, 'payment']);
+Route::post('/cart/delete',[CartController::class, 'delete']);
+
+            
 // (Hotel) Payment Dashboard Function & invoice
 Route::post('/dashboard/payment/tolak', [PaymentController::class, 'tolak']);
 Route::post('/dashboard/payment/confirm', [PaymentController::class, 'confirmation']);
 Route::get('/dashboard/payment/invoice', [TransactionController::class, 'paymentinvoice']);
+
 // (Hotel) Room Index
 Route::get('/rooms/{no}', [RoomController::class, 'roomshow']);
 Route::post('/rooms/{no}', [RoomController::class, 'roomshowpost']);

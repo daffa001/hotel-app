@@ -11,16 +11,17 @@ class Payment extends Model
     protected $guarded = ['id'];
     protected $tables = 'payments';
 
-    public function Transaction()
-    {
-        return $this->belongsTo(Transaction::class);
-    }
-
     public function Customer()
     {
         return $this->belongsTo(Customer::class, 'c_id');
     }
-    public function Methode(){
+    public function Methode()
+    {
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
+    public function Transaction()
+    {
+        return $this->hasMany(Transaction::class, 'payments_id');
     }
 }

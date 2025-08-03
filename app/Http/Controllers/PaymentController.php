@@ -21,9 +21,17 @@ class PaymentController extends Controller
         if (auth()->user()->is_admin == 0) {
             abort(404);
         }
-        $pay = Payment::with('Customer', 'Transaction')->orderBy('id', 'desc')->get()->where('status', 'Down Payment');
-        $pay1 = Payment::with('Customer', 'Transaction')->orderBy('id', 'desc')->get()->where('status', 'Pending');
-        return view('dashboard.payment.index', compact('pay', 'pay1'));
+        $pay = Payment::with('Customer')
+            ->whereIn('status', ['pending', 'Denied'])
+            ->orderBy('id', 'desc')
+            ->get();;
+
+        $paySucces = Payment::with('Customer')
+            ->where('status', 'Down Payment')
+            ->orderBy('id', 'desc')
+            ->get();;
+        $transaction = Transaction::with('Customer')->orderBy('id', 'desc')->get();
+        return view('dashboard.payment.index', compact('pay', 'transaction', 'paySucces'));
     }
     public function debt($id)
     {
@@ -71,6 +79,7 @@ class PaymentController extends Controller
             abort(404);
         }
         $pay = Payment::where('id', $id)->first();
+        $transaction = Transaction::where('payments_id', $id)->with('Customer', 'Room')->first();
         if ($request['nid']) {
             $notif = Notifications::where('id', $request->nid)->first();
             $notif->status = 'read';
@@ -82,7 +91,7 @@ class PaymentController extends Controller
             }
         }
 
-        return view('dashboard.payment.invoice', compact('pay'));
+        return view('dashboard.payment.invoice', compact('pay','transaction'));
     }
 
     public function confirmation(Request $request)
@@ -104,10 +113,9 @@ class PaymentController extends Controller
             unlink($path);
         }
         $pay->update([
-            'image' => null
+            'image' => null,
+            'status' => 'Denied',
         ]);
-        $transaction = Transaction::findOrFail($pay->Transaction->id);
-        $transaction->delete();
         Alert::success('Success', 'Payment Telah Di tolak');
         return redirect('/dashboard/order/history-pay');
     }

@@ -127,7 +127,7 @@
                                                 </div>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary float-end">Berikutnya</button>
+                                            <button type="submit" class="btn btn-primary float-end">Pay DownPayment</button>
                                         </form>
                                     </div>
                                 </div>

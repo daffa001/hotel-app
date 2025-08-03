@@ -48,13 +48,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $no = 1;
-                            @endphp
                             @foreach ($user as $u)
                                 <tr>
+                                    {{$no=$no+1}}
                                     {{-- <td>{{ $loop->iteration }}</td> --}}
-                                    <td>{{ $u->id }}</td>
+                                    <td>{{ $no }}</td>
                                     <td>{{ $u->Customer->name ?? '-' }}</td>
                                     <td>{{ $u->username ?? '-' }}</td>
                                     <td>{{ $u->telp ?? '-' }}</td>

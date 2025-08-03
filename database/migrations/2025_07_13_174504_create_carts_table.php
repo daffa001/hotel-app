@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('c_id')->index()->unsigned();
             $table->foreign('c_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->bigInteger('room_id')->index()->unsigned();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+
+            $table->bigInteger('rooms_id')->index()->unsigned();
+            $table->foreign('rooms_id')->references('id')->on('rooms')->onDelete('cascade')->onUpdate('cascade');
+            
             $table->date('check_in');
             $table->date('check_out');
-            $table->string('status');
+            $table->decimal('price_day',10,2);
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
@@ -33,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('carts');
     }
 };
