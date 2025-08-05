@@ -46,6 +46,7 @@ Route::post('/cart/checkout',[CartController::class, 'checkoutPage']);
 Route::get('/cart/checkout/{id}',[CartController::class, 'checkoutPageID']);
 Route::get('/cart/payment',[CartController::class, 'payment']);
 Route::post('/cart/delete',[CartController::class, 'delete']);
+Route::post('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
 
             
 // (Hotel) Payment Dashboard Function & invoice

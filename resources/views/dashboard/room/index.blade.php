@@ -34,7 +34,7 @@
                             <tr>
                                 <th width="5%">#</th>
                                 <th width="5%">Id</th>
-                                <th>No</th>
+                                <th>Stock</th>
                                 <th>Type</th>
                                 <th>Status</th>
                                 <th>Capacity</th>
@@ -50,7 +50,7 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $r->id }}</td>
-                                    <td>{{ $r->no }}</td>
+                                    <td>{{ $r->stock }}</td>
                                     <td>{{ $r->type->name }}</td>
                                     <td>{{ $r->status->name }}</td>
                                     <td>{{ $r->capacity }}</td>
