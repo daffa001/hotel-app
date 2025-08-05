@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="col-md-5 px-lg-3 px-md-3 px-0">
-                        <h5 class="mb-3">{{ $r->type->name }} #{{ $r->no }} </h5>
+                        <h5 class="mb-3">{{ $r->type->name }}</h5>
                         <div class="guests">
                             <h6 class="mb-1">Guests</h6>
                             <span class="badge rounded-pill bg-light text-dark text-wrap">
@@ -217,7 +217,7 @@
                             <input type="hidden" name="to" value="{{ $request->to }}">
                             <button class="btn btn-sm w-100 btn-light border border-dark shadow-none mb-2">Book now</button>
                         </form>
-                        <form action="/rooms/{{ $r->no }}" method="post">
+                        <form action="/rooms/{{ $r->stock }}" method="post">
                             @csrf
                             <input type="hidden" name="no" value="{{ $r->no }}">
                             <input type="hidden" name="from" value="{{ $request->from }}">

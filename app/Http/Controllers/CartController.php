@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PaymentMethod;
 use App\Models\Cart;
 use App\Models\Payment;
+use App\Models\Room;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -31,6 +32,58 @@ class CartController extends Controller
         return view('user.cart', compact('his', 'user'));
     }
 
+    public function checkStock(Request $request)
+    {
+        $id = Auth()->user()->Customer->id;
+        $carts = Cart::where('c_id', $id)->get();
+
+        $outOfStock = [];
+
+        foreach ($carts as $item) {
+            $room = Room::find($item->rooms_id);
+
+            // 1. Cek stok habis
+            if (!$room || $room->stock <= 0) {
+                $outOfStock[] = $room->name ?? 'Kamar Tidak Ditemukan';
+                $item->delete();
+                continue;
+            }
+
+            // 2. Cek bentrok tanggal dengan transaksi yang sudah bayar
+            $conflictingTransactions = Transaction::where('room_id', $item->rooms_id)
+                ->whereIn('status', ['Reservation', 'Checkin', 'Paid']) // kamu bisa sesuaikan status
+                ->where(function ($query) use ($item) {
+                    $query->whereBetween('check_in', [$item->check_in, $item->check_out])
+                        ->orWhereBetween('check_out', [$item->check_in, $item->check_out])
+                        ->orWhere(function ($q) use ($item) {
+                            $q->where('check_in', '<=', $item->check_in)
+                                ->where('check_out', '>=', $item->check_out);
+                        });
+                })
+                ->exists();
+
+            if ($conflictingTransactions) {
+                $outOfStock[] = $room->name . ' (tanggal tidak tersedia)';
+                $item->delete();
+            }
+        }
+
+        if (count($outOfStock) > 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Beberapa kamar telah dihapus karena stok kosong atau tanggal bentrok:',
+                'rooms' => $outOfStock
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
+
+
+
     public function checkoutPage()
     {
         $id = Auth()->user()->Customer->id;
@@ -52,29 +105,29 @@ class CartController extends Controller
         // dd($pay->id);
         return view('frontend.cart.orderID', compact('his', 'paymentmet'));
     }
-public function checkoutID(Request $request, $id)
-{
-    $userId = auth()->id();
+    public function checkoutID(Request $request, $id)
+    {
+        $userId = auth()->id();
 
-    // Validasi file gambar bukti
-    $validatedData = $request->validate([
-        'image' => 'required|image|file',
-    ]);
+        // Validasi file gambar bukti
+        $validatedData = $request->validate([
+            'image' => 'required|image|file',
+        ]);
 
-    // Simpan gambar ke storage
-    $image = $request->file('image')->store('bukti-images', 'public');
+        // Simpan gambar ke storage
+        $image = $request->file('image')->store('bukti-images', 'public');
 
-    // Cari data Payment yang sesuai ID
-    $payment = Payment::findOrFail($id);
+        // Cari data Payment yang sesuai ID
+        $payment = Payment::findOrFail($id);
 
-    // Update kolom image dan status
-    $payment->update([
-        'image' => $image,
-        'status' => 'Pending', // atau 'Sudah Bayar', tergantung konvensi kamu
-    ]);
+        // Update kolom image dan status
+        $payment->update([
+            'image' => $image,
+            'status' => 'Pending', // atau 'Sudah Bayar', tergantung konvensi kamu
+        ]);
 
-    return redirect('/history/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
-}
+        return redirect('/history/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
+    }
 
 
     public function checkout(Request $request)
@@ -125,6 +178,13 @@ public function checkoutID(Request $request, $id)
                 'status' => 'Reservation',
                 'price' => $c->price,
             ]);
+        }
+        $room = Room::find($c->rooms_id);
+        if ($room && $room->stock > 0) {
+            $room->stock -= 1;
+            $room->save();
+        } else {
+            return redirect()->back()->with('error', 'Stok kamar tidak mencukupi.');
         }
         // Hapus keranjang
         Cart::where('c_id', $userId)->delete();

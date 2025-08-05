@@ -6,10 +6,10 @@
 
 @section('content')
 @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 
 <div class="container my-5">
@@ -45,7 +45,7 @@
                     <td>{{ $h->price }}</td>
                     <td>
                         <form action="/cart/delete" method="POST">
-                             @csrf
+                            @csrf
                             <input type="hidden" name="cart_id" value="{{$h->id}}">
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </form>
@@ -60,9 +60,39 @@
             </tbody>
         </table>
     </div>
-    <form action="/cart/checkout" method="POST">
+    <form id="checkout-form" action="/cart/checkout" method="POST">
         @csrf
-        <button type="submit" class="btn btn-success">Lanjut ke Checkout</button>
+        <button type="button" id="checkout-btn" class="btn btn-success">Lanjut ke Checkout</button>
     </form>
+
+    <script>
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            fetch("{{ route('cart.checkStock') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        // Semua kamar tersedia, submit form
+                        document.getElementById('checkout-form').submit();
+                    } else {
+                        // Tampilkan alert dan refresh
+                        alert(data.message + "\n\n- " + data.rooms.join("\n- "));
+                        location.reload();
+                    }
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("Terjadi kesalahan saat memeriksa stok kamar.");
+                });
+        });
+    </script>
+
+
 </div>
 @endsection
