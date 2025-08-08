@@ -94,10 +94,13 @@
                         <label for="check_out" class="col-form-label">Check out</label>
                         <input type="date" class="form-control" required id="check_out" name="to">
                     </div>
+                    <div class="mb-3">
+                        <label for="check_out" class="col-form-label">Quantity</label>
+                        <input type="number" class="form-control"  name="quantity">
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"> Cek Tanggal</button>
-
+                        <button type="submit" class="btn btn-primary">Cart</button>
                     </div>
                 </form>
             </div>

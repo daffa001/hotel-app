@@ -6,6 +6,7 @@ use App\Models\PaymentMethod;
 use App\Models\Cart;
 use App\Models\Payment;
 use App\Models\Room;
+use App\Models\RoomStocks;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -177,14 +178,8 @@ class CartController extends Controller
                 'check_out' => $c->check_out,
                 'status' => 'Reservation',
                 'price' => $c->price,
+                'quantity' => $c->quantity
             ]);
-        }
-        $room = Room::find($c->rooms_id);
-        if ($room && $room->stock > 0) {
-            $room->stock -= 1;
-            $room->save();
-        } else {
-            return redirect()->back()->with('error', 'Stok kamar tidak mencukupi.');
         }
         // Hapus keranjang
         Cart::where('c_id', $userId)->delete();
