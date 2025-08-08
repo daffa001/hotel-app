@@ -45,9 +45,11 @@ class OrderController extends Controller
 
             // Hitung jumlah kamar yang dipesan di tanggal ini
             $jumlahDipesan = Transaction::where('room_id', $request->room)
+                ->where('status', '!=', 'check out') // hanya hitung transaksi aktif
                 ->where('check_in', '<=', $tanggal)
                 ->where('check_out', '>', $tanggal)
-                ->sum('quantity'); // pastikan kolom quantity ada di table transaction
+                ->sum('quantity');
+
 
             if (($jumlahDipesan + $request->quantity) > $stokKamar) {
                 $overbooked = true;

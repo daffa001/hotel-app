@@ -14,7 +14,7 @@ class CheckoutController extends Controller
 {
     public function index(){
         $today = Carbon::now()->isoFormat('Y-M-D');
-        $transaction = Transaction::with('Customer', 'Payments', 'Room')->where('check_out', '>=', $today)->orderby('id', 'desc')->get();
+        $transaction = Transaction::with('Customer', 'Room')->where('check_out', '>=', $today)->orderby('id', 'desc')->get();
         return view('dashboard.checkout.checkoutlist', compact('transaction'));
     }
 
@@ -37,7 +37,7 @@ class CheckoutController extends Controller
         }  
 
          $today = Carbon::now()->isoFormat('Y-M-D');
-        $transaction = Transaction::with('Customer', 'Payments', 'Room')->where('check_out', '>=', $today)->orderby('id', 'desc')->get();
+        $transaction = Transaction::with('Customer', 'Room')->where('check_out', '>=', $today)->orderby('id', 'desc')->get();
         return view('dashboard.checkout.checkoutlist', compact('transaction'));
        
     }
