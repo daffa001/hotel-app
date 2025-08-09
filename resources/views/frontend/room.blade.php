@@ -142,7 +142,7 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between">
             <div class="col-md-6 col-lg-8 col-8">
-                <h2 class="fw-bold h-font room-title">{{ $room->type->name }} {{ $room->no }}</h2>
+                <h2 class="fw-bold h-font room-title">{{ $room->type->name }}</h2>
             </div>
             <div class="col-md-6 col-lg-4 col-4 text-end">
                 <h4 class="h-font room-price"><span class="text-success fw-bold"> IDR
@@ -152,7 +152,7 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-end mt-2">
+        {{-- <div class="d-flex justify-content-end mt-2">
             @if ($request->from)
             <form action="/order" method="POST">
                 @csrf
@@ -167,7 +167,7 @@
                 Sekarang </button>
             @endif
             </form>
-        </div>
+        </div> --}}
 
         <div class="col-md-12">
             <hr class="border border-secondary opacity-25 w-100">
