@@ -37,9 +37,10 @@
                             <th width="5%">No</th>
                             <th width="5%">Name</th>
                             <th width="5%">Kamar</th>
-                            <th>alamat</th>
-                            <th>email</th>
-                            <th>Telp</th>
+                            <th>nomer kamar</th>
+                            <th>check in</th>
+                            <th>check out</th>
+                            <th>telp</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -68,6 +69,7 @@
                             <td>{{ $t->Room->no }}</td>
                             <td>{{ $t->check_in->isoFormat('D MMM Y') }}</td>
                             <td>{{ $t->check_out->isoFormat('D MMM Y') }}</td>
+                            <td>{{ $t->Customer->user->telp?? '-' }}</td>
                             <td>{{ $t->status }}</td>
                             <td>
                                 {{-- <form action="/dashboard/checkout/checkoutlist/{{ $t->id }}" method="post">
