@@ -14,9 +14,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('index*') ? 'active' : ''}}" aria-current="page" href="/">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link me-2 {{ Request::is('rooms*') ? 'active' : ''}} " href="/rooms">Rooms</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link me-2 {{ Request::is('facilities*') ? 'active' : ''}}" href="/facilities">Facilities</a>
                     </li>

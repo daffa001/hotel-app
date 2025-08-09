@@ -5,10 +5,10 @@
 
 @section('content')
 @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 <div class="my-5 px-4">
     <h2 class="fw-bold h-font text-center">Kamar Hotel </h2>
@@ -35,7 +35,7 @@
                             <div class="border bg-light p-3 rounded mb-3">
                                 <h5 class="mb-3" style="font-size: 18px;">Check Ketersediaan Kamar</h5>
                                 <select class="form-select" name="type_id" id="type_id">
-                                    
+
                                     <option value="">-- All Types --</option> {{-- <-- Tambahan ini --}}
                                     @foreach ($type as $t)
                                     <option value="{{ $t->id }}"
@@ -49,22 +49,10 @@
                                 <input type="date" name="from" class="form-control shadow-none mb-3">
                                 <label class="form-label">Check-out</label>
                                 <input type="date" name="to" class="form-control shadow-none">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" value="1" name="quantity" class="form-control shadow-none">
                             </div>
-                            {{-- <div class="border bg-light p-3 rounded mb-3">
-        <h5 class="mb-3" style="font-size: 18px;">FACILITIES</h5>
-        <div class="mb-2">
-          <input type="checkbox" id="f1" class="form-check-input shadow-none me-1">
-          <label class="form-check-label" for="f1">Facility one</label>
-        </div>
-        <div class="mb-2">
-            <input type="checkbox" id="f1" class="form-check-input shadow-none me-1">
-          <label class="form-check-label" for="f2">Facility two</label>
-        </div>
-        <div class="mb-2">
-          <input type="checkbox" id="f1" class="form-check-input shadow-none me-1">
-          <label class="form-check-label" for="f3">Facility three</label>
-        </div>
-    </div> --}}
+
                             <div class="border bg-light p-3 rounded mb-3">
                                 <h5 class="mb-3" style="font-size: 18px;">Tamu</h5>
                                 <div class="d-flex">
@@ -73,10 +61,7 @@
                                         <input type="number" name="count" class="form-control shadow-none"
                                             value="1">
                                     </div>
-                                    {{-- <div>
-          <label class="form-label">Children</label>
-          <input type="number" class="form-control shadow-none">
-        </div> --}}
+
                                 </div>
                             </div>
 
@@ -85,8 +70,9 @@
                                     <button class="btn border" type="submit">SEARCH</button>
                                 </div>
                             </div>
+                        </form>
                     </div>
-                    </form>
+
                 </div>
             </nav>
         </div>
@@ -234,7 +220,6 @@
             </div>
             @endforeach
             <div class="d-flex justify-content-center">
-                {!! $rooms->links() !!}
             </div>
         </div>
 
