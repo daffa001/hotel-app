@@ -196,9 +196,9 @@
                     <div class="col-md-2 mt-lg-0 mt-md-0 mt-4 text-center">
                         <h6 class="mb-4 text-success"> IDR {{ number_format($r->price) }} </h6>
                         @if ($request->from)
-                        <form action="/order" method="post">
+                        <form action="/rooms/{{ $r->no }}" method="post">
                             @csrf
-                            <input type="hidden" name="room" value="{{ $r->id }}">
+                            <input type="hidden" name="id" value="{{ $r->id }}">
                             <input type="hidden" name="from" value="{{ $request->from }}">
                             <input type="hidden" name="to" value="{{ $request->to }}">
                             <input type="hidden" name="quantity" value="{{ $request->quantity }}">
@@ -206,10 +206,6 @@
                         </form>
                         <form action="/rooms/{{ $r->stock }}" method="post">
                             @csrf
-                            <input type="hidden" name="no" value="{{ $r->no }}">
-                            <input type="hidden" name="from" value="{{ $request->from }}">
-                            <input type="hidden" name="to" value="{{ $request->to }}">
-                            <input type="hidden" name="quantity" value="{{ $request->quantity }}">
 
                             <button class="btn btn-sm w-100 btn-dark shadow-none">More details</button>
                         </form>
