@@ -201,6 +201,7 @@
                             <input type="hidden" name="room" value="{{ $r->id }}">
                             <input type="hidden" name="from" value="{{ $request->from }}">
                             <input type="hidden" name="to" value="{{ $request->to }}">
+                            <input type="hidden" name="quantity" value="{{ $request->quantity }}">
                             <button class="btn btn-sm w-100 btn-light border border-dark shadow-none mb-2">Book now</button>
                         </form>
                         <form action="/rooms/{{ $r->stock }}" method="post">
@@ -208,6 +209,8 @@
                             <input type="hidden" name="no" value="{{ $r->no }}">
                             <input type="hidden" name="from" value="{{ $request->from }}">
                             <input type="hidden" name="to" value="{{ $request->to }}">
+                            <input type="hidden" name="quantity" value="{{ $request->quantity }}">
+
                             <button class="btn btn-sm w-100 btn-dark shadow-none">More details</button>
                         </form>
                         @else

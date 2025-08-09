@@ -26,6 +26,7 @@ class OrderController extends Controller
             Alert::error('Please Login First!');
             return redirect('/login');
         }
+
         $stayfrom = Carbon::parse($request->from);
         $stayuntil = Carbon::parse($request->to);
         $room = Room::where('id', $request->room)->first();
@@ -68,6 +69,10 @@ class OrderController extends Controller
             $customer = Customer::where('id', $request->customer)->first();
         }
 
+        if ($customer->nik == null) {
+            Alert::error('Kesalahan Data', 'Mohon Isi Data NIK');
+            return redirect('myaccount');
+        }
         $price = $room->price;
         $dayDifference = $stayfrom->diffindays($stayuntil);
         $total = $price * $dayDifference;

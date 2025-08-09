@@ -44,7 +44,7 @@ Route::post('/bayar', [OrderController::class, 'bayar']);
 
 Route::post('/cart/post', [CartController::class, 'checkout']);
 Route::post('/cart/post/{id}', [CartController::class, 'checkoutID']);
-Route::post('/cart/checkout', [CartController::class, 'checkoutPage']);
+Route::get('/cart/checkout', [CartController::class, 'checkoutPage']);
 Route::get('/cart/checkout/{id}', [CartController::class, 'checkoutPageID']);
 Route::get('/cart/payment', [CartController::class, 'payment']);
 Route::post('/cart/delete', [CartController::class, 'delete']);

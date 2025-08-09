@@ -60,12 +60,12 @@
             </tbody>
         </table>
     </div>
-    <form id="checkout-form" action="/cart/checkout" method="POST">
+    <form id="checkout-form" action="/cart/checkout" method="GET">
         @csrf
-        <button type="button" id="checkout-btn" class="btn btn-success">Lanjut ke Checkout</button>
+        <button type="submit" class="btn btn-success">Lanjut ke Checkout</button>
     </form>
 
-    <script>
+    <!-- <script>
         document.getElementById('checkout-btn').addEventListener('click', function() {
             fetch("{{ route('cart.checkStock') }}", {
                     method: "POST",
@@ -91,7 +91,7 @@
                     alert("Terjadi kesalahan saat memeriksa stok kamar.");
                 });
         });
-    </script>
+    </script> -->
 
 
 </div>
