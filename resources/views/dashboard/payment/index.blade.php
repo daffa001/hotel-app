@@ -21,7 +21,7 @@
                             <th class="text-center">Customer</th>
                             <th class="text-center">Jumlah Kamar</th>
                             <th class="text-center">Jenis Kamar</th>
-                            <th class="text-center">Price</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Payment Date</th>
                             <th class="text-center">Bukti</th>
                             <th class="text-center">Action</th>
@@ -95,7 +95,7 @@
                             <th class="text-center">Customer</th>
                             <th class="text-center">Jumlah Kamar</th>
                             <th class="text-center">Jenis Kamar</th>
-                            <th class="text-center">Price</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Payment Date</th>
                             <th class="text-center">Bukti</th>
                             <th class="text-center">Action</th>
@@ -121,7 +121,7 @@
                             <th class="text-center">Customer</th>
                             <th class="text-center">Jumlah Kamar</th>
                             <th class="text-center">Jenis Kamar</th>
-                            <th class="text-center">Price</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Payment Date</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Action</th>
@@ -164,7 +164,7 @@
                             <th class="text-center">Customer</th>
                             <th class="text-center">Jumlah Kamar</th>
                             <th class="text-center">Jenis Kamar</th>
-                            <th class="text-center">Price</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Payment Date</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Action</th>

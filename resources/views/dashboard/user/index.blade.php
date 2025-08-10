@@ -36,14 +36,14 @@
                             <tr>
                                 <th width="5%">#</th>
                                 {{-- <th width="5%">Id</th> --}}
-                                <th width="5%">Name</th>
+                                <th width="5%">Nama</th>
                                 <th>Username</th>
                                 <th>Telp</th>
-                                <th>Birthdate</th>
-                                <th>Jk</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Jenis Kelamin</th>
                                 <th>Email</th>
                                 <th>Nik</th>
-                                <th>Address</th>
+                                <th>Alamat</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -83,14 +83,14 @@
                             <tr>
                                 <th width="5%">#</th>
                                 {{-- <th width="5%">Id</th> --}}
-                                <th width="5%">Name</th>
+                                <th width="5%">Nama</th>
                                 <th>Username</th>
                                 <th>Telp</th>
-                                <th>Birthdate</th>
-                                <th>Jk</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Jenis Kelamin</th>
                                 <th>Email</th>
                                 <th>Nik</th>
-                                <th>Address</th>
+                                <th>Alamat</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

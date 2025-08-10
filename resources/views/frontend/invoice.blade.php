@@ -83,6 +83,7 @@
                     <thead>
                       <tr>
                         <th width="15%">ROOM</th>
+                        <th width="15%">Jumlah Kamar</th>
                         <th>CHECK IN</th>
                         <th>CHECK OUT</th>
                         <th>DAY</th>
@@ -94,6 +95,7 @@
                       @foreach ($tr as $t)
                       <tr>
                         <td class="text-center">{{$t->room->type->name}} # {{$t->room->no }}</td>
+                        <td class="text-center">{{$t->quantity }}</td>
                         <td class="text-center">{{Carbon\Carbon::parse($t->check_in)->isoformat('D MMM YYYY')}}</td>
                         <td class="text-center">{{Carbon\Carbon::parse($t->check_out)->isoformat('D MMM YYYY')}}</td>
                         <td class="unit text-center">{{ $t->check_in->diffindays($t->check_out) }} Days</td>
@@ -103,7 +105,7 @@
                       @endforeach
 
                       <tr>
-                        <td colspan="4"></td>
+                        <td colspan="5"></td>
                         <td class="grand total text-center">GRAND TOTAL</td>
                         <td class="grand total text-center">Rp. {{number_format($p->price) }}</td>
                       </tr>

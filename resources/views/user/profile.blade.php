@@ -50,7 +50,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Name <span style="color:red">*</span> </p>
+                                        <p class="mb-0">Nama <span style="color:red">*</span> </p>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control  mb-0" name="name" id="name"
@@ -99,7 +99,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Phone <span style="color:red">*</span></p>
+                                        <p class="mb-0">Nomer Telpon <span style="color:red">*</span></p>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control  mb-0" name="telp" id="telp"
@@ -109,7 +109,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Birthday</p>
+                                        <p class="mb-0">Tanggal Lahir</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="date" class="form-control " name="birthdate" id="birthdate"
@@ -119,7 +119,7 @@
                                 <hr class="mt-3">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Address</p>
+                                        <p class="mb-0">Alamat</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control  mb-0" name="address" id="address"
@@ -130,7 +130,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Gender</p>
+                                        <p class="mb-0">Jenis Kelamin</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="d-flex">
@@ -173,7 +173,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <p class="mb-0">Job</p>
+                                        <p class="mb-0">Perkerjaan</p>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control " name="job" id="job"
@@ -182,7 +182,7 @@
                                 </div>
                                 <hr class="mt-3">
 
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-sm-3">
                                         <p class="mb-0">Card Number </p>
                                     </div>
@@ -190,12 +190,12 @@
                                         <input type="text" class="form-control " name="card_number" id="card_number"
                                             value="{{ $user->card_number }}">
                                     </div>
-                                </div>
+                                </div> --}}
 
 
 
                                 <div class="d-flex justify-content-end mt-4">
-                                    <button type="submit" class="btn btn-primary"> Update! </button>
+                                    <button type="submit" class="btn btn-primary"> Update </button>
                     </form>
                 </div>
                 <hr class="mt-3">
