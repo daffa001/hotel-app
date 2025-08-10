@@ -131,9 +131,7 @@
                     </div>
                 @endif
             </div>
-
             <div class="swiper-pagination"></div>
-
             <!-- If we need scrollbar -->
             <div class="swiper-scrollbar"></div>
         </div>

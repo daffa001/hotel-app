@@ -17,7 +17,7 @@
 
                             <option value="">-- All Types --</option> {{-- <-- Tambahan ini --}}
                             @foreach ($type as $t)
-                            <option value="{{ $t->id }}"
+                            <option name="type_id" value="{{ $t->id }}"
                                 {{ request('type_id') == $t->id ? 'selected' : '' }}>
                                 {{ $t->name }}
                             </option>

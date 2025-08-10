@@ -13,8 +13,8 @@
             <thead class="table-dark">
                 <tr>
                     <th>No</th>
-                    <th>Jenis Kamar</th>
-                    <th>Nomor Kamar</th>
+                    <th>Nama Kamar</th>
+                    <th>Jumlah Kamar</th>
                     <th>Check In</th>
                     <th>Check Out</th>
                     <th>Harga/Hari</th>
@@ -30,14 +30,18 @@
                 <tr>
                     <td>{{$no=$no+1}}</td>
                     <td>{{ $h->room->type->name }}</td>
-                    <td>{{ $h->room->no }}</td>
-                    <td>{{ $h->check_in }}</td>
-                    <td>{{ $h->check_out }}</td>
+                    <td>{{ $h->quantity }}</td>
+                    <td>{{ \Carbon\Carbon::parse($h->check_in)->translatedFormat('d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($h->check_out)->translatedFormat('d F Y') }}</td>
                     <td>{{ $h->room->price }}</td>
                     <td>{{ $h->price }}</td>
                     <input type="hidden" value="{{$total=$total+$h->price}}">
                 </tr>
                 @endforeach
+                <tr class="table-secondary fw-bold">
+                    <td colspan="6" class="text-end">Total</td>
+                    <td colspan="2">Rp {{$total}}</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -49,7 +53,7 @@
             <select name="payment_method_id" class="form-select mt-1"
                 id="paymentmethod">
                 @foreach ($paymentmet as $pay)
-                <option value="{{ $pay->id }}">{{ $pay->nama }}</option>
+                <option value="{{ $pay->id }}">{{ $pay->nama }} - Transfer ke ({{ $pay->no_rek }})</option>
                 @endforeach
             </select>
         </div>
@@ -57,9 +61,11 @@
                 3mb)</span></label>
         <input required type="file" class="form-control mb-3" name="image"
             id="image">
-        <div class="text-end mt-4">
+        <div class="text-end mt-4  justify-content-between">
+            <a href="{{ url()->previous() }}" class="btn btn-secondary">Kembali</a>
             <button type="submit" class="btn btn-primary">Bayar</button>
         </div>
     </form>
+
 </div>
 @endsection

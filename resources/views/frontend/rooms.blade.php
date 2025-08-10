@@ -46,11 +46,11 @@
                                 </select>
 
                                 <label class="form-label">Check-in</label>
-                                <input type="date" name="from" class="form-control shadow-none mb-3">
+                                <input type="date" value="{{$request->from}}" name="from" class="form-control shadow-none mb-3">
                                 <label class="form-label">Check-out</label>
-                                <input type="date" name="to" class="form-control shadow-none">
+                                <input type="date" value="{{$request->to}}" name="to" class="form-control shadow-none">
                                 <label class="form-label">Quantity</label>
-                                <input type="number" value="1" name="quantity" class="form-control shadow-none">
+                                <input type="number" value="{{$request->quantity}}" name="quantity" class="form-control shadow-none">
                             </div>
 
                             <div class="border bg-light p-3 rounded mb-3">
@@ -59,7 +59,7 @@
                                     <div class="me-2">
                                         <label class="form-label">Berapa banyak tamu?</label>
                                         <input type="number" name="count" class="form-control shadow-none"
-                                            value="1">
+                                            value="{{$request->count}}">
                                     </div>
 
                                 </div>
@@ -202,6 +202,7 @@
                             <input type="hidden" name="from" value="{{ $request->from }}">
                             <input type="hidden" name="to" value="{{ $request->to }}">
                             <input type="hidden" name="quantity" value="{{ $request->quantity }}">
+                            <input type="hidden" name="url" value="{{ url()->full() }}">
                             <button class="btn btn-sm w-100 btn-light border border-dark shadow-none mb-2">Pesan sekarang</button>
                         </form>
                         <form action="/rooms/{{ $r->no }}" method="post">

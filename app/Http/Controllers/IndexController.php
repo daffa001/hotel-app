@@ -30,6 +30,7 @@ class IndexController extends Controller
     }
     public function room(Request $request)
     {
+        session(['return_url' => request()->fullUrl()]);
         // Jangan proses search kalau semua kolom (kecuali type_id) kosong
         if (
             !$request->filled('from') &&
