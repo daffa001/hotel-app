@@ -20,6 +20,10 @@
                                                 <label for="no" class="form-label">Room Number <span style="font-style: italic;">(required)</span></label>
                                                     <input type="text" class="form-control" id="no" name ='no' required value="{{ $p->no }}">
                                                 </div>
+                                                <div class="col-md-2">
+                                                <label for="no" class="form-label">Stock <span style="font-style: italic;">(required)</span></label>
+                                                    <input type="text" class="form-control" id="stock" name ='stock' required value="{{ $p->stock }}">
+                                                </div>
                                                 <div class="col-md-4">
                                                     <label for="status_id" class="form-label">Status Room <span style="font-style: italic;">(required)</span></label>
                                                     <select name="status_id" id="status_id" class="form-select">

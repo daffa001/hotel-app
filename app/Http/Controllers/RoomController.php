@@ -63,6 +63,7 @@ class RoomController extends Controller
             'no' => $request->no,
             'type_id' => $request->type_id,
             'capacity' => $request->capacity,
+            'stock' => $request->stock,
             'price' => $request->price,
             'status_id' => $request->status_id,
             'info' => $request->info
