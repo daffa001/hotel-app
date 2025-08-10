@@ -33,12 +33,12 @@
                     <thead class="table-secondary">
                         <tr>
                             <th width="5%">#</th>
-                            <th>name</th>
+                            <th>Nama Kamar</th>
                             <th>Stock</th>
 
                             <th>Status</th>
-                            <th>Capacity</th>
-                            <th>Price/day</th>
+                            <th>Kapasitas</th>
+                            <th>Harga/Malam</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -71,14 +71,13 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this
-                                            data?</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Hapus data ini?</h5>
                                         <button class="close" type="button" data-dismiss="modal"
                                             aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">Select "Delete" below if you are ready to delete.</div>
+                                    <div class="modal-body">Apakah anda ingin menghapus data?</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button"
                                             data-dismiss="modal">Cancel</button>
@@ -96,12 +95,12 @@
                     <tfoot class="table-secondary">
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>Nama Kamar</th>
                             <th>No</th>
 
                             <th>Status</th>
-                            <th>Capacity</th>
-                            <th>Price/day</th>
+                            <th>Kapasitas</th>
+                            <th>Harga/Malam</th>
                             <th width="14%">Action</th>
                         </tr>
                     </tfoot>
