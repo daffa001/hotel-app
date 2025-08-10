@@ -101,7 +101,7 @@ class OrderController extends Controller
 
         // return view('frontend.order', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
         // return view('user.cart', compact('customer', 'room', 'stayfrom', 'dayDifference', 'stayuntil', 'total', 'paymentmet'));
-return redirect(session('return_url', '/rooms'));
+        return redirect(session('return_url', '/rooms'))->with('success', 'Item berhasil masuk keranjang.');
     }
 
     public function order(Request $request)

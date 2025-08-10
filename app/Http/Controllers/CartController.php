@@ -87,8 +87,15 @@ class CartController extends Controller
 
     public function checkoutPage()
     {
+
+        // Ambil isi keranjang
+
         $id = Auth()->user()->Customer->id;
         $userId = auth()->id();
+        $carts = Cart::where('c_id', $userId)->get();
+        if ($carts->isEmpty()) {
+            return redirect('/cart')->with('success', 'Keranjang kosong.');
+        }
         // $carts = Cart::with('room.type')->where('c_id', $userId)->get();
         // $total = $carts->sum('price');
         $his = Cart::where('c_id', $id)->orderBy('id', 'desc')->paginate(10);
