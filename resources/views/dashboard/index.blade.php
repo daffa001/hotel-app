@@ -38,7 +38,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Earnings {{ Carbon\Carbon::now()->isoformat('MMMM') }} (Monthly)</div>
+                                       Pendapatan {{ Carbon\Carbon::now()->isoformat('MMMM') }} (Bulanan)</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">IDR {{ number_format($monthCount) }}
                                     </div>
                                 </div>
@@ -57,7 +57,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Earnings (All Time)</div>
+                                        Pendapatan (Keseluruhan)</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">IDR
                                         {{ number_format($totalAmount) }}</div>
                                 </div>
@@ -70,66 +70,16 @@
                 </div>
 
                 <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Profit Compared Last
-                                        Month
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <div class="h5 mb-0 mr-2 font-weight-bold text-gray-800">{{ $percentage }}%
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="progress progress-sm mr-2">
-                                                @if ($percentage > 10)
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                        style="width: {{ $kiri }}%"
-                                                        aria-valuenow="{{ $kiri }}" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                        @if ($percentage > 100)
-                                                            100
-                                                        @endif
-                                                    </div>
-                                                    @if ($percentage > 100)
-                                                        <div class="progress-bar bg-warning" role="progressbar"
-                                                            style="width: {{ $kanan }}%"
-                                                            aria-valuenow="{{ $kanan }}" aria-valuemin="0"
-                                                            aria-valuemax="100">{{ $percentage - 100 }}</div>
-                                                    @endif
-                                                @else
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                        style="width: {{ $percentage }}%"
-                                                        aria-valuenow="{{ $percentage }}" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                        @if ($percentage > 100)
-                                                            100
-                                                        @endif
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+               
+                         
                 <!-- Pending Requests Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
+                <div class="col-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                        Total Transaction</div>
+                                        Total Transaksi</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $transactionCount }}</div>
                                 </div>
                                 <div class="col-auto">
@@ -150,7 +100,7 @@
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Pendapatan Hotel</h6>
                             <div class="dropdown no-arrow">
                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -182,7 +132,7 @@
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Pendapatan perbulan</h6>
                             <div class="dropdown no-arrow">
                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
