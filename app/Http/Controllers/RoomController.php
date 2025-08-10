@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RoomController extends Controller
-{   
+{
     public function index()
     {
         if (auth()->guest()) {
@@ -29,7 +29,7 @@ class RoomController extends Controller
         return view('dashboard.room.index', compact('room', 'p'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         if (auth()->guest()) {
             return redirect('/login');
@@ -39,29 +39,38 @@ class RoomController extends Controller
         }
         $status = RoomStatus::get();
         $type = Type::get();
+        $p = Type::count();
+
         // dd($type);
-        return view('dashboard.room.create', compact('type', 'status'));
+        return view('dashboard.room.create', compact('type', 'status', 'p'));
     }
     public function post(Request $request)
     {
+
         // dd($request);
         $request->validate([
-            'no' => 'required',
-            'type_id' => 'required',
+            'id' => 'required',
+            'type_name' => 'required',
             'capacity' => 'required',
             'price' => 'required',
             'status_id' => 'required',
-            'info' => 'required'
+            'info' => 'required',
             // 'image' => 'nullable|image|file|max:3072'
         ]);
 
         // if($request->file('image')){
         //     $image = $validatedData['image'] = $request->file('image')->store('product-images');
         // }
+        Type::create([
+            'name' => $request->type_name,
+            // 'code' => $request->code,
+            'info' => $request->info
+        ]);
 
+        $type_id = Type::where('name', $request->type_name)->first();
         Room::create([
-            'no' => $request->no,
-            'type_id' => $request->type_id,
+            'no' => $request->id,
+            'type_id' => $type_id->id,
             'capacity' => $request->capacity,
             'stock' => $request->stock,
             'price' => $request->price,
