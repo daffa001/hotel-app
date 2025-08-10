@@ -61,9 +61,11 @@
                 3mb)</span></label>
         <input required type="file" class="form-control mb-3" name="image"
             id="image">
-        <div class="text-end mt-4">
+        <div class="text-end mt-4  justify-content-between">
+            <a href="{{ url()->previous() }}" class="btn btn-secondary">Kembali</a>
             <button type="submit" class="btn btn-primary">Bayar</button>
         </div>
     </form>
+
 </div>
 @endsection
