@@ -20,8 +20,8 @@
             <thead class="table-dark">
                 <tr>
                     <th>No</th>
-                    <th>Jenis Kamar</th>
-                    <th>Nomor Kamar</th>
+                    <th>Nama Kamar</th>
+                    <th>Jumlah Kamar</th>
                     <th>Check In</th>
                     <th>Check Out</th>
                     <th>Harga/Hari</th>
@@ -38,9 +38,9 @@
                 <tr>
                     <td>{{$no=$no+1}}</td>
                     <td>{{ $h->room->type->name }}</td>
-                    <td>{{ $h->room->no }}</td>
-                    <td><input type="date" class="form-control" value="{{ $h->check_in }}"></td>
-                    <td><input type="date" class="form-control" value="{{ $h->check_out }}"></td>
+                    <td>{{ $h->quantity }}</td>
+                    <td>{{ \Carbon\Carbon::parse($h->check_in)->translatedFormat('d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($h->check_out)->translatedFormat('d F Y') }}</td>
                     <td>{{ $h->room->price }}</td>
                     <td>{{ $h->price }}</td>
                     <td>

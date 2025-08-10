@@ -70,12 +70,12 @@ class OrderController extends Controller
         }
 
         if ($customer->nik == null) {
-            Alert::error('Kesalahan Data', 'Mohon Isi Data NIK');
+            Alert::error('Kesalahan Data', 'Mohon Isi Data Diri');
             return redirect('myaccount');
         }
         $price = $room->price;
         $dayDifference = $stayfrom->diffindays($stayuntil);
-        $total = $price * $dayDifference;
+        $total = $price * $dayDifference * $request->quantity;
         // OPSI 1: CEK DULU APAKAH SUDAH ADA DI CART
         $existingCart = Cart::where('c_id', $customer->id)
             ->where('rooms_id', $request->room)
