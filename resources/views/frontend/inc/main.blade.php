@@ -38,7 +38,6 @@
                 width: 100%;
                 height: 50vh;
             }
-            .navbar {}
 		}
         .pop:hover{
             border-top-color: var(--teal) !important;

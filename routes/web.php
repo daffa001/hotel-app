@@ -28,6 +28,8 @@ Route::post('/cart', [CartController::class, 'index']);
 // (Hotel) Index route
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/rooms', [IndexController::class, 'room']);
+Route::get('/rooms/search', [IndexController::class, 'search']);
+
 Route::post('/rooms', [IndexController::class, 'roompost']);
 Route::get('/facilities', [IndexController::class, 'facility']);
 Route::get('/contact', [IndexController::class, 'contact']);
@@ -40,15 +42,15 @@ Route::post('/order/post', [OrderController::class, 'order']);
 Route::get('/bayar/{id}', [OrderController::class, 'pembayaran']);
 Route::post('/bayar', [OrderController::class, 'bayar']);
 
-Route::post('/cart/post',[CartController::class, 'checkout']);
-Route::post('/cart/post/{id}',[CartController::class, 'checkoutID']);
-Route::post('/cart/checkout',[CartController::class, 'checkoutPage']);
-Route::get('/cart/checkout/{id}',[CartController::class, 'checkoutPageID']);
-Route::get('/cart/payment',[CartController::class, 'payment']);
-Route::post('/cart/delete',[CartController::class, 'delete']);
+Route::post('/cart/post', [CartController::class, 'checkout']);
+Route::post('/cart/post/{id}', [CartController::class, 'checkoutID']);
+Route::get('/cart/checkout', [CartController::class, 'checkoutPage']);
+Route::get('/cart/checkout/{id}', [CartController::class, 'checkoutPageID']);
+Route::get('/cart/payment', [CartController::class, 'payment']);
+Route::post('/cart/delete', [CartController::class, 'delete']);
 Route::post('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
 
-            
+
 // (Hotel) Payment Dashboard Function & invoice
 Route::post('/dashboard/payment/tolak', [PaymentController::class, 'tolak']);
 Route::post('/dashboard/payment/confirm', [PaymentController::class, 'confirmation']);

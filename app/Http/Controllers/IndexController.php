@@ -18,7 +18,8 @@ class IndexController extends Controller
     {
         $room = Room::paginate(3);
         // dd(auth()->user());
-        return view('index', compact('room'));
+        $type = Type::get();
+        return view('index', compact('type', 'room'));
     }
 
     public function pesan()
@@ -29,31 +30,90 @@ class IndexController extends Controller
     }
     public function room(Request $request)
     {
-        // dd($request->all());
-        if (!empty($request->from or $request->count)) {
-            $stayfrom = Carbon::parse($request->from)->isoFormat('D MMM YYYY');
-            $stayto = Carbon::parse($request->to)->isoFormat('D MMM YYYY');
-            // dd($request->all());
-            if ($request->from and $request->to and $request->count != null) {
-                $occupiedRoomId = $this->getOccupiedRoomID($request->from, $request->to);
-                $rooms = $this->getUnocuppiedroom($request, $occupiedRoomId);
-                $roomsCount = $this->countUnocuppiedroom($request, $occupiedRoomId);
-            } elseif ($request->count != null) {
-                $rooms = $this->getUnocuppiedroom2($request);
-                $roomsCount = $this->countUnocuppiedroom2($request);
-            } else {
-                $occupiedRoomId = $this->getOccupiedRoomID($request->from, $request->to);
-                $rooms = $this->getUnocuppiedroom($request, $occupiedRoomId);
-                $roomsCount = $this->countUnocuppiedroom($request, $occupiedRoomId);
+        // Jangan proses search kalau semua kolom (kecuali type_id) kosong
+        if (
+            !$request->filled('from') &&
+            !$request->filled('to') &&
+            !$request->filled('quantity') &&
+            !$request->filled('count') &&
+            !$request->filled('type_id')
+        ) {
+            return redirect()->back()->with('error', 'Harap isi minimal satu kolom pencarian atau pilih tipe kamar.');
+        }
+
+        // Base query (masih builder)
+        $query = Room::with('type', 'status');
+
+        // 1) Filter kapasitas tamu (count) terlebih dahulu
+        if ($request->filled('count')) {
+            $query->where('capacity', '>=', (int) $request->count);
+        }
+
+        // 2) Filter tipe jika dipilih
+        if ($request->filled('type_id')) {
+            $query->where('type_id', $request->type_id);
+        }
+
+        // 3) Jika ada tanggal (dengan atau tanpa quantity), cek availability per room
+        if ($request->filled('from') && $request->filled('to')) {
+            $stayfrom = Carbon::parse($request->from);
+            $stayuntil = Carbon::parse($request->to);
+
+            // default desired quantity = 1 jika tidak diisi
+            $desiredQty = $request->filled('quantity') ? (int) $request->quantity : 1;
+
+            $periode = new \DatePeriod($stayfrom, new \DateInterval('P1D'), $stayuntil);
+
+            // Ambil kandidat setelah apply capacity & type filter (mengurangi jumlah loop)
+            $candidateRooms = $query->get();
+
+            $roomIdsTidakCukup = [];
+            foreach ($candidateRooms as $room) {
+                $cukup = true;
+
+                foreach ($periode as $date) {
+                    $tanggal = $date->format('Y-m-d');
+
+                    $jumlahDipesan = Transaction::where('status', '!=', 'check out')
+                        ->where('room_id', $room->id)
+                        ->where('check_in', '<=', $tanggal)
+                        ->where('check_out', '>', $tanggal)
+                        ->sum('quantity');
+
+                    $sisa = $room->stock - $jumlahDipesan;
+
+                    if ($sisa < $desiredQty) {
+                        $cukup = false;
+                        break;
+                    }
+                }
+
+                if (!$cukup) {
+                    $roomIdsTidakCukup[] = $room->id;
+                }
+            }
+
+            // Kembalikan ke builder: exclude room yang tidak cukup
+            if (!empty($roomIdsTidakCukup)) {
+                $query->whereNotIn('id', $roomIdsTidakCukup);
             }
         } else {
-            $rooms = Room::paginate(20);
-            $roomsCount = Room::count();
+            // kalau tidak ada tanggal, tetapi ada quantity => cek stock global
+            if ($request->filled('quantity')) {
+                $query->where('stock', '>=', (int) $request->quantity);
+            }
         }
+
+        // Ambil hasil akhir dengan paginate
+        $rooms = $query->paginate(20);
+        $roomsCount = $rooms->total();
         $type = Type::get();
 
         return view('frontend.rooms', compact('rooms', 'roomsCount', 'request', 'type'));
     }
+
+
+
 
     public function facility()
     {

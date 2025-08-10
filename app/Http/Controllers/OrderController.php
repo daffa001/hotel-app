@@ -26,20 +26,40 @@ class OrderController extends Controller
             Alert::error('Please Login First!');
             return redirect('/login');
         }
+
         $stayfrom = Carbon::parse($request->from);
         $stayuntil = Carbon::parse($request->to);
         $room = Room::where('id', $request->room)->first();
 
-        $cektransaksi = Transaction::where('room_id', $request->room)
-            ->where(function ($query) use ($stayfrom, $stayuntil) {
-                $query->where([['check_in', '<=', $stayfrom], ['check_out', '>=', $stayuntil]])
-                    ->orWhere([['check_in', '>=', $stayfrom], ['check_in', '<=', $stayuntil]])
-                    ->orWhere([['check_out', '>=', $stayfrom], ['check_out', '<=', $stayuntil]]);
-            })
-            ->get();
+        $jumlahDipesan = 0;
+        $stokKamar = $room->stock;
+        $overbooked = false;
 
-        if ($cektransaksi->count() > 0) {
-            Alert::error('Kamar Tidak Tersedia');
+        $periode = new \DatePeriod(
+            $stayfrom,
+            new \DateInterval('P1D'),
+            $stayuntil // tidak termasuk tanggal checkout
+        );
+
+        foreach ($periode as $date) {
+            $tanggal = $date->format('Y-m-d');
+
+            // Hitung jumlah kamar yang dipesan di tanggal ini
+            $jumlahDipesan = Transaction::where('room_id', $request->room)
+                ->where('status', '!=', 'check out') // hanya hitung transaksi aktif
+                ->where('check_in', '<=', $tanggal)
+                ->where('check_out', '>', $tanggal)
+                ->sum('quantity');
+
+
+            if (($jumlahDipesan + $request->quantity) > $stokKamar) {
+                $overbooked = true;
+                break;
+            }
+        }
+
+        if ($overbooked) {
+            Alert::error('Kamar Tidak Tersedia pada tanggal yang dipilih');
             return back();
         }
         if ($request->customer == null) {
@@ -49,6 +69,10 @@ class OrderController extends Controller
             $customer = Customer::where('id', $request->customer)->first();
         }
 
+        if ($customer->nik == null) {
+            Alert::error('Kesalahan Data', 'Mohon Isi Data NIK');
+            return redirect('myaccount');
+        }
         $price = $room->price;
         $dayDifference = $stayfrom->diffindays($stayuntil);
         $total = $price * $dayDifference;
@@ -69,6 +93,7 @@ class OrderController extends Controller
                 'price_day' => $price,
                 'price' => $total,
                 'status' => 'pending',
+                'quantity' => $request->quantity
             ]);
         }
         $paymentmethodnotid = [1];
@@ -126,12 +151,12 @@ class OrderController extends Controller
     public function invoice($id)
     {
         $p = Payment::where('id', $id)->with('Customer', 'Methode')->first();
-        $tr = Transaction::where('payments_id',$id)->with('Room')->paginate(10);
+        $tr = Transaction::where('payments_id', $id)->with('Room')->paginate(10);
         if ($p->status == 'Pending') {
             return abort(404);
         }
         // dd($p);
-        return view('frontend.invoice', compact('p','tr'));
+        return view('frontend.invoice', compact('p', 'tr'));
     }
 
     public function pembayaran($id)

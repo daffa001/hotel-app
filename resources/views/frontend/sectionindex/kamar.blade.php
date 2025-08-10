@@ -106,7 +106,7 @@
                         @endif
                     </div>
                     <div class="d-flex justify-content-evenly mb-2">
-                        <a href="/rooms/{{ $r->no }}" class="btn btn-sm border border-black btn- shadow-none">Booking</a>
+                        {{-- <a href="/rooms/{{ $r->no }}" class="btn btn-sm border border-black btn- shadow-none">Booking</a> --}}
                         <a href="/rooms/{{ $r->no }}" class="btn btn-sm btn-dark shadow-none">Detail Lengkap</a>
                     </div>
 
@@ -114,8 +114,8 @@
             </div>
         </div>
         @endforeach
-        <div class="col-lg-12 text-center mt-5">
+        {{-- <div class="col-lg-12 text-center mt-5">
             <a href="/rooms" class="btn btn-sm btn-dark rounded-0 fw-bold shadow-none">Lebih Banyak</a>
-        </div>
+        </div> --}}
     </div>
 </div>

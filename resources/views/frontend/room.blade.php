@@ -1,131 +1,134 @@
 @extends('frontend.inc.main')
 @section('title')
-<title>Hotel Kuta | KAMAR #{{ $room->no }}</title>
+    <title>Hotel Kuta | KAMAR #{{ $room->no }}</title>
 @endsection
 
 @section('css')
-<style>
-    @media (max-width: 576px) {
-        .room-title {
-            font-size: 18px;
+    <style>
+        @media (max-width: 576px) {
+            .room-title {
+                font-size: 18px;
+            }
+
+            .room-price {
+                font-size: 12px;
+            }
+
+            .desc-title {
+                font-size: 16px;
+            }
+
+            .desc-subtitle {
+                font-size: 12px;
+            }
+
+            .desc-content {
+                font-size: 10px;
+            }
         }
 
-        .room-price {
-            font-size: 12px;
+        @media (min-width: 577px) and (max-width: 992px) {
+            .room-title {
+                font-size: 22px;
+            }
+
+            .room-price {
+                font-size: 14px;
+            }
+
+            .desc-title {
+                font-size: 18px;
+            }
+
+            .desc-subtitle {
+                font-size: 16px;
+            }
+
+            .desc-content {
+                font-size: 14px;
+            }
         }
 
-        .desc-title {
-            font-size: 16px;
-        }
+        @media (min-width: 993px) {
+            .room-title {
+                font-size: 26px;
+            }
 
-        .desc-subtitle {
-            font-size: 12px;
-        }
+            .room-price {
+                font-size: 16px;
+            }
 
-        .desc-content {
-            font-size: 10px;
-        }
-    }
+            .desc-title {
+                font-size: 22px;
+            }
 
-    @media (min-width: 577px) and (max-width: 992px) {
-        .room-title {
-            font-size: 22px;
-        }
+            .desc-subtitle {
+                font-size: 20px;
+            }
 
-        .room-price {
-            font-size: 14px;
+            .desc-content {
+                font-size: 18px;
+            }
         }
-
-        .desc-title {
-            font-size: 18px;
-        }
-
-        .desc-subtitle {
-            font-size: 16px;
-        }
-
-        .desc-content {
-            font-size: 14px;
-        }
-    }
-
-    @media (min-width: 993px) {
-        .room-title {
-            font-size: 26px;
-        }
-
-        .room-price {
-            font-size: 16px;
-        }
-
-        .desc-title {
-            font-size: 22px;
-        }
-
-        .desc-subtitle {
-            font-size: 20px;
-        }
-
-        .desc-content {
-            font-size: 18px;
-        }
-    }
-</style>
+    </style>
 @endsection
 
 @section('content')
-<div class="modal fade" id="checkin" tabindex="-1" aria-labelledby="checkinLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="checkinLabel">Kapan?</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="checkin" tabindex="-1" aria-labelledby="checkinLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="checkinLabel">Kapan?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/order">
+                        @csrf
+                        <input type="hidden" name="customer" value="{{ $customer }}">
+                        <input type="hidden" name="room" value="{{ $room->id }}">
+                        <div class="mb-3">
+                            <label for="check_in" class="col-form-label">Check in</label>
+                            <input type="date" class="form-control" required id="check_in" name="from">
+                        </div>
+                        <div class="mb-3">
+                            <label for="check_out" class="col-form-label">Check out</label>
+                            <input type="date" class="form-control" required id="check_out" name="to">
+                        </div>
+                        <div class="mb-3">
+                            <label for="check_out" class="col-form-label">Quantity</label>
+                            <input type="number" class="form-control" name="quantity">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Cart</button>
+                        </div>
+                    </form>
+                </div>
+
+
             </div>
-            <div class="modal-body">
-                <form method="post" action="/order">
-                    @csrf
-                    <input type="hidden" name="customer" value="{{ $customer }}">
-                    <input type="hidden" name="room" value="{{ $room->id }}">
-                    <div class="mb-3">
-                        <label for="check_in" class="col-form-label">Check in</label>
-                        <input type="date" class="form-control" required id="check_in" name="from">
-                    </div>
-                    <div class="mb-3">
-                        <label for="check_out" class="col-form-label">Check out</label>
-                        <input type="date" class="form-control" required id="check_out" name="to">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary"> Cek Tanggal</button>
-
-                    </div>
-                </form>
-            </div>
-
-
         </div>
     </div>
-</div>
 
 
-<div class="my-5 px-4">
-    {{-- <div class="h-line bg-dark"></div> --}}
-</div>
+    <div class="my-5 px-4">
+        {{-- <div class="h-line bg-dark"></div> --}}
+    </div>
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <div class="swiper swiper-container">
-        <div class="swiper-wrapper">
-            @if ($room->images->count() > 0)
-            @foreach ($room->images as $room_images)
-            <div class="swiper-slide">
-                <img src="{{ asset('storage/' . $room_images->image) }}" class="image-swipper d-block"
-                    alt="{{ $room_images->image }}">
-                @endforeach
+        <div class="swiper swiper-container">
+            <div class="swiper-wrapper">
+                @if ($room->images->count() > 0)
+                    @foreach ($room->images as $room_images)
+                        <div class="swiper-slide">
+                            <img src="{{ asset('storage/' . $room_images->image) }}" class="image-swipper d-block"
+                                alt="{{ $room_images->image }}">
+                    @endforeach
                 @else
-                <div class="swiper-slide">
-                    <img src="/nyoba/images/carousel/1.png" class="image-swipper d-block" alt="1.png">
-                </div>
+                    <div class="swiper-slide">
+                        <img src="/nyoba/images/carousel/1.png" class="image-swipper d-block" alt="1.png">
+                    </div>
                 @endif
             </div>
 
@@ -139,7 +142,7 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between">
             <div class="col-md-6 col-lg-8 col-8">
-                <h2 class="fw-bold h-font room-title">{{ $room->type->name }} {{ $room->no }}</h2>
+                <h2 class="fw-bold h-font room-title">{{ $room->type->name }}</h2>
             </div>
             <div class="col-md-6 col-lg-4 col-4 text-end">
                 <h4 class="h-font room-price"><span class="text-success fw-bold"> IDR
@@ -151,17 +154,18 @@
 
         <div class="d-flex justify-content-end mt-2">
             @if ($request->from)
-            <form action="/order" method="POST">
-                @csrf
-                <input type="hidden" name="customer" value="{{ $customer }}">
-                <input type="hidden" name="room" value="{{ $room->id }}">
-                <input type="hidden" name="from" value="{{ $request->from }}">
-                <input type="hidden" name="to" value="{{ $request->to }}">
-                <button type="submit" class="btn btn-custom"> Pesan Sekarang </button>
-            </form>
+                <form action="/order" method="POST">
+                    @csrf
+                    <input type="hidden" name="customer" value="{{ $customer }}">
+                    <input type="hidden" name="room" value="{{ $room->id }}">
+                    <input type="hidden" name="from" value="{{ $request->from }}">
+                    <input type="hidden" name="to" value="{{ $request->to }}">
+                    <input type="hidden" name="quantity" value="{{ $request->quantity }}">
+
+                    <button type="submit" class="btn btn-custom"> Pesan Sekarang </button>
+                </form>
             @else
-            <button type="button" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#checkin"> Pesan
-                Sekarang </button>
+
             @endif
             </form>
         </div>
@@ -231,11 +235,12 @@
             <div class="d-flex justify-content-center w-100">
                 <div class="col-12">
                     <iframe class="w-100 rounded mt-3" height="320px"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.734492691161!2d106.79730077587176!3d-6.555164864083095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c40de0f72211%3A0xbd963a080fe6b8dd!2sBSI%20Cilebut!5e0!3m2!1sen!2sid!4v1749014498829!5m2!1sen!2sid" allowfullscreen=""
-                        loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map"></iframe>
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.734492691161!2d106.79730077587176!3d-6.555164864083095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c40de0f72211%3A0xbd963a080fe6b8dd!2sBSI%20Cilebut!5e0!3m2!1sen!2sid!4v1749014498829!5m2!1sen!2sid"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        class="map"></iframe>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 @endsection

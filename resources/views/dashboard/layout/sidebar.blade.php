@@ -38,8 +38,8 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <h6 class="collapse-header">Inner</h6>
                  <a class="collapse-item" href="/dashboard/data/room">Room</a>
-                 <a class="collapse-item" href="/dashboard/data/status">Status Room</a>
-                 <a class="collapse-item" href="/dashboard/data/type">Type Room</a>
+                 <!-- <a class="collapse-item" href="/dashboard/data/status">Status Room</a>
+                 <a class="collapse-item" href="/dashboard/data/type">Type Room</a> -->
              </div>
          </div>
      </li>
@@ -93,8 +93,6 @@
          </a>
          <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
-                 <h6 class="collapse-header">Order now:</h6>
-                 <a class="collapse-item" href="/dashboard/order">Transaction</a>
                  <h6 class="collapse-header">Data Transactions:</h6>
                  <a class="collapse-item" href="/dashboard/order/history-pay">History Payment</a>
 
