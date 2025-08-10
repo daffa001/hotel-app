@@ -192,7 +192,7 @@
                         </div>
                     </div> --}}
                     @if($no_kamar =! null)
-                    <input type="text" name="room_no" value="{{ $no_kamar }}">
+                    <input type="hidden" name="room_no" value="{{ $no_kamar }}">
                     @endif
 
 
