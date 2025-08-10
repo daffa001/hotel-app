@@ -191,7 +191,7 @@ class CartController extends Controller
         // Hapus keranjang
         Cart::where('c_id', $userId)->delete();
 
-        return redirect('/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
+        return redirect('/cart/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
     }
 
     public function delete(Request $request)

@@ -27,6 +27,7 @@ Route::post('/cart', [CartController::class, 'index']);
 
 // (Hotel) Index route
 Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/home', [IndexController::class, 'index'])->name('index');
 Route::get('/rooms', [IndexController::class, 'room']);
 Route::get('/rooms/search', [IndexController::class, 'search']);
 
