@@ -21,11 +21,11 @@
                                 <input type="text" name="id" class="form-control" id="id" readonly value="{{ $p+1 }}">
                             </div>
                             <div class="col-md-2">
-                                <label for="no" class="form-label">Stock <span style="font-style: italic;">(required)</span></label>
+                                <label for="no" class="form-label">Stok <span style="font-style: italic;"></span></label>
                                 <input type="text" class="form-control" id="stock" name='stock' required placeholder="10">
                             </div>
                             <div class="col-md-4">
-                                <label for="status_id" class="form-label">Status Room <span style="font-style: italic;">(required)</span></label>
+                                <label for="status_id" class="form-label">Status Kamar <span style="font-style: italic;"></span></label>
                                 <select name="status_id" id="status_id" class="form-select">
                                     {{-- <option selected>-- Pilih Status Kamar --</option> --}}
                                     @foreach ($status as $s)
@@ -35,7 +35,7 @@
                                 {{-- <input type="text" class="form-control" id="status_id" name ='status_id' required> --}}
                             </div>
                             <div class="col-md-4">
-                                <label for="type_id" class="form-label">Name Rooms <span style="font-style: italic;">(required)</span></label>
+                                <label for="type_id" class="form-label">Nama Kamar <span style="font-style: italic;">(required)</span></label>
                                 <input type="text" class="form-control" id="type_name" name='type_name' required>
 
                                 <!-- <select class="form-select" name="type_id" id="type_id">
@@ -50,18 +50,18 @@
                         </div>
                         <div class="row">
                             <div class="col-md-5 mt-3">
-                                <label for="capacity" class="form-label"> Capacity <span style="font-style: italic;">(required)</span></label>
+                                <label for="capacity" class="form-label"> Kapasitas <span style="font-style: italic;"></span></label>
                                 <input type="number" class="form-control" id="capacity" name='capacity' required>
                             </div>
                             <div class="col-md-5 mt-3">
-                                <label for="price" class="form-label"> Price / day <span style="font-style: italic;">(required)</span></label>
+                                <label for="price" class="form-label"> Harga / Malam <span style="font-style: italic;"></span></label>
                                 <input type="number" class="form-control" id="price" name='price' required>
                             </div>
                         </div>
                         <div class="row">
 
                             <div class="col-md-10 mt-3">
-                                <label for="info" class="form-label"> Description <span style="font-style: italic;">(required)</span></label>
+                                <label for="info" class="form-label"> Deskripsi <span style="font-style: italic;"></span></label>
                                 <textarea placeholder="Beach view" name="info" id="info" rows="3" class="form-control"></textarea>
                                 {{-- <input type="number" class="form-control" id="price" name ='price' required> --}}
                             </div>

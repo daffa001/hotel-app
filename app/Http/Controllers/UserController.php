@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Payment;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -175,8 +176,13 @@ class UserController extends Controller
 
             ]);
         }
-        Alert::success('Success', 'Data berhasil di edit');
-        return redirect('/myaccount');
+
+        if ($request->room_no) {
+            return redirect(session('return_url', '/rooms/'))->with('success', 'Data berhasil di edit');
+        } else {
+            Alert::success('Success', 'Data berhasil di edit');
+            return redirect('/myaccount');
+        }
     }
 
     public function delete($id)
@@ -188,7 +194,7 @@ class UserController extends Controller
         return back();
     }
 
-    public function profile()
+    public function profile(Request $request)
     {
         if (auth()->guest()) {
             return redirect('/login');
@@ -255,10 +261,10 @@ class UserController extends Controller
             ->with('Customer')
             ->orderBy('id', 'desc')
             ->paginate(10);
-        $transaction = Transaction::where('c_id', $id)->with('Customer','Room')->orderBy('id', 'desc')->get();
+        $transaction = Transaction::where('c_id', $id)->with('Customer', 'Room')->orderBy('id', 'desc')->get();
 
         // $p = Payment::where('c_id', $id)->with('Customer', 'Transaction', 'Methode')->first();
 
-        return view('user.history', compact('his', 'user','transaction'));
+        return view('user.history', compact('his', 'user', 'transaction'));
     }
 }

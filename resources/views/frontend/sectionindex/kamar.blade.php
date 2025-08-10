@@ -15,7 +15,7 @@
                     @endif
                 
                 <div class="card-body">
-                    <h5 class="card-title">{{ $r->type->name }} #{{ $r->no }}</h5>
+                    <h5 class="card-title">{{ $r->type->name }} </h5>
                     <h6 class="mb-3 text-success">IDR {{ number_format($r->price) }} </h6>
                     <div class="guests mb-2">
                         <h6 class="mb-1">Tamu</h6>

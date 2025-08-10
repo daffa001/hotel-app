@@ -46,11 +46,11 @@
                                 </select>
 
                                 <label class="form-label">Check-in</label>
-                                <input type="date" value="{{$request->from}}" name="from" class="form-control shadow-none mb-3">
+                                <input type="date" value="{{$request->from}}" name="from" class="form-control shadow-none mb-3" required>
                                 <label class="form-label">Check-out</label>
-                                <input type="date" value="{{$request->to}}" name="to" class="form-control shadow-none">
+                                <input type="date" value="{{$request->to}}" name="to" class="form-control shadow-none" required>
                                 <label class="form-label">Quantity</label>
-                                <input type="number" value="{{$request->quantity}}" name="quantity" class="form-control shadow-none">
+                                <input type="number" value="{{$request->quantity}}" name="quantity" class="form-control shadow-none" required>
                             </div>
 
                             <div class="border bg-light p-3 rounded mb-3">

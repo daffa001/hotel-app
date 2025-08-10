@@ -26,20 +26,20 @@
                     </div>
                     <div class="col-lg-4 mb-3">
                         <label class="form-label" style="font-weight: 500;">Check-in</label>
-                        <input type="date" name="from" id="from" class="form-control shadow-none">
+                        <input type="date" name="from" id="from" class="form-control shadow-none" required>
                     </div>
                     <div class="col-lg-4 mb-3">
                         <label class="form-label" style="font-weight: 500;">Check-out</label>
-                        <input type="date" name="to" id="to" class="form-control shadow-none">
+                        <input type="date" name="to" id="to" class="form-control shadow-none" required>
                     </div>
 
                     <div class="col-lg-1 mb-3">
                         <label class="form-label" style="font-weight: 500;">Quantity</label>
-                        <input type="number" value="1" name="quantity" class="form-control shadow-none">
+                        <input type="number" value="1" name="quantity" class="form-control shadow-none" required>
                     </div>
                     <div class="col-lg-1 mb-3">
                         <label class="form-label" style="font-weight: 500;">Tamu</label>
-                        <input type="number" name="count" class="form-control shadow-none" id="count" value="1">
+                        <input type="number" name="count" class="form-control shadow-none" id="count" value="1" required>
                     </div>
                     <div class="col-lg-1 mb-lg-3 mt-2">
                         <button type="submit" class="btn shadow-none border">Submit</button>

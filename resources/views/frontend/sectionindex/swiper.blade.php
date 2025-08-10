@@ -2,23 +2,23 @@
     <div class="swiper swiper-container">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-                <img src="/nyoba/images/carousel/1.png" class="image-swipper d-block" alt="swipper-image-1">
+                <img src="/nyoba/images/carousel/1.jpg" class="image-swipper d-block" alt="swipper-image-1">
             </div>
-            <div class="swiper-slide">
+            {{-- <div class="swiper-slide">
                 <img src="/nyoba/images/carousel/2.png" class="image-swipper d-block" alt="swipper-image-2">
             </div>
             <div class="swiper-slide">
                 <img src="/nyoba/images/carousel/3.png" class="image-swipper d-block" alt="swipper-image-3">
+            </div> --}}
+            <div class="swiper-slide">
+                <img src="/nyoba/images/carousel/4.jpg" class="image-swipper d-block" alt="swipper-image-4">
             </div>
             <div class="swiper-slide">
-                <img src="/nyoba/images/carousel/4.png" class="image-swipper d-block" alt="swipper-image-4">
+                <img src="/nyoba/images/carousel/5.jpg" class="image-swipper d-block" alt="swipper-image-5">
             </div>
-            <div class="swiper-slide">
-                <img src="/nyoba/images/carousel/5.png" class="image-swipper d-block" alt="swipper-image-5">
-            </div>
-            <div class="swiper-slide">
+            {{-- <div class="swiper-slide">
                 <img src="/nyoba/images/carousel/6.png" class="image-swipper d-block" alt="swipper-image-6">
-            </div>
+            </div> --}}
 
             <div class="swiper-pagination"></div>
 

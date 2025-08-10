@@ -62,8 +62,9 @@
                                 <thead>
                                     <tr>
                                         <td>
-                                            <h6 class="mb-1">Room</h6>
+                                            <h6 class="mb-1">Nama Kamar</h6>
                                         </td>
+                                    
                                         <td>
                                             <h6 class="mb-1">Check in</h6>
                                         </td>
@@ -77,11 +78,11 @@
                                     @php
                                     $matchedTransaction = $transaction->where('payments_id', $h->id);
                                     @endphp
-
                                     @if ($matchedTransaction->count())
                                     @foreach ($matchedTransaction as $m)
                                     <tr>
                                         <td>{{ $m->room->type->name }}</td>
+                
                                         <td>{{ $m->check_in->format('d M Y') }}</td>
                                         <td>{{ $m->check_out->format('d M Y') }}</td>
                                     </tr>
