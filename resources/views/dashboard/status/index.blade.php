@@ -32,11 +32,11 @@
                     <table class="table table-sm table-bordered table-responsive" id="myTable">
                         <thead class="table-secondary">
                             <tr>
-                                <th width="5%">#</th>
-                                <th width="5%">Id</th>
-                                <th>Name</th>
+                                <th width="5%">No</th>
+                                {{-- <th width="5%">Id</th> --}}
+                                <th>Nama</th>
                                 <th>Code</th>
-                                <th>Desc</th>
+                                <th>Deskripsi</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -47,7 +47,7 @@
                             @foreach ($status as $r)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $r->id }}</td>
+                                    {{-- <td>{{ $r->id }}</td> --}}
                                     <td>{{ $r->name }}</td>
                                     <td>{{ $r->code }}</td>
                                     <td>{{ $r->info }}</td>
@@ -90,11 +90,11 @@
                         </tbody>
                         <tfoot class="table-secondary">
                             <tr>
-                                <th width="5%">#</th>
-                                <th width="5%">Id</th>
-                                <th>Name</th>
+                                <th width="5%">No</th>
+                                {{-- <th width="5%">Id</th> --}}
+                                <th>Nama</th>
                                 <th>Code</th>
-                                <th width="48%">Desc</th>
+                                <th width="48%">Deskripsi</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
