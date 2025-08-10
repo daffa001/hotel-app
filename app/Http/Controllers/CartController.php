@@ -11,6 +11,9 @@ use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
+use RealRashid\SweetAlert\Facades\Alert;
+
+
 class CartController extends Controller
 {
     public function index()
@@ -190,8 +193,8 @@ class CartController extends Controller
         }
         // Hapus keranjang
         Cart::where('c_id', $userId)->delete();
-
-        return redirect('/cart/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
+        Alert::success('Success', 'Booking Sukses,Harap Tunggu Konfirmasi Dari Admin.');
+        return redirect('/')->with('success', 'Harap Tunggu Konfirmasi Dari Admin.');
     }
 
     public function delete(Request $request)
